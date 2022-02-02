@@ -67,7 +67,8 @@ namespace File_Finder {
                 int upper = Int32.Parse(upperBound.Text);
 
                 if (recursive) {
-
+                    results = search.rangeSearchRecur(lower, upper, path);
+                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
                 } else {
                     results = search.rangeSearch(lower, upper);
                     System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
