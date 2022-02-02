@@ -1,5 +1,4 @@
-using System.Collections.ObjectModel;
-using System.Management.Automation;
+
 
 namespace File_Finder {
     public partial class Form1 : Form {
@@ -34,17 +33,14 @@ namespace File_Finder {
 
         //Search button clicked
         private void button1_Click(object sender, EventArgs e) {
-
-            PowerShell ps = PowerShell.Create();
-            ps.AddScript("C:\\VisualStudio\\File_Finder\\File_Finder\\PowerShell\\main.ps1");
-            ps.Invoke();
-            //System.Diagnostics.Debug.WriteLine("RESULTS START");
-
-
-
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             string searchTerm;
+
+            var fileList = Directory.GetDirectories(path);
+            foreach (var file in fileList) {
+                System.Diagnostics.Debug.WriteLine(file);
+            }
 
             if (searchType == "Keyword Phrase") {
                 searchTerm = phraseTextBox.Text;
@@ -59,8 +55,5 @@ namespace File_Finder {
 
         }
 
-        private void pathTextBox_Change(object sender, EventArgs e) {
-            throw new NotImplementedException();
-        }
     }
 }

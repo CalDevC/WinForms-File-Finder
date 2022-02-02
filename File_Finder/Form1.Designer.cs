@@ -61,7 +61,6 @@
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(325, 23);
             this.pathTextBox.TabIndex = 1;
-            this.pathTextBox.TextChanged += new System.EventHandler(this.pathTextBox_Change);
             // 
             // label1
             // 
