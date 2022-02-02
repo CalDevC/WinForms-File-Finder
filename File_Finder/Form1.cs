@@ -37,14 +37,23 @@ namespace File_Finder {
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
-            Search search = new Search(path, recursive, fileTypes);
 
+            //Clear results box
+            foundFiles.Items.Clear();
 
-            
+            //Instantiate search object
+            //Search search = new Search(path, recursive, fileTypes);
+            Search search = new Search("\\\\upifile1\\vidar", false, ".pdf");
 
             if (searchType == "Keyword Phrase") {
                 string searchTerm = phraseTextBox.Text;
-                string[] results = search.phraseSearch(searchTerm);
+                List<string> results = search.phraseSearch(searchTerm);
+                System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
+
+                foreach (var filepath in results) {
+                    foundFiles.Items.Add(filepath);
+                    System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                }
 
             } else if(searchType == "Number Range") {
                 int lower = Int32.Parse(lowerBound.Text);

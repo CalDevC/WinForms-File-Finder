@@ -17,8 +17,8 @@ namespace File_Finder {
             this.fileTypes = fileTypes.Split(',');
         }
 
-        public string[] phraseSearch(string searchTerm) {
-            string[] foundFiles = {};
+        public List<string> phraseSearch(string searchTerm) {
+            List<string> foundFiles = new List<string>();
             //For each file type
             foreach (var type in this.fileTypes) {
                 if (recursive) {
@@ -26,13 +26,14 @@ namespace File_Finder {
                 } else {
                     //Get all file names of the current type that contain the search term
                     var fileList = Directory.GetFiles(path, "*" + type);
-                    foreach (var filepath in fileList) {
-                        var filename = filepath.Split("\\").Last();
-                        foundFiles.Append(filepath);  //Append the found file names to temp found
-                        System.Diagnostics.Debug.WriteLine(filepath);
+                    foreach (string filepath in fileList) {
+                        string filename = filepath.Split("\\").Last();
+                        if (filename.Contains(searchTerm)) {
+                            foundFiles.Add(filepath);  //Append the found file names to temp found
+                            System.Diagnostics.Debug.WriteLine(filepath + "   " + foundFiles.Count);
+                        }
                     }
                 }
-
             }
 
             return foundFiles;      

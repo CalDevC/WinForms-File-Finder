@@ -40,6 +40,7 @@
             this.upperBound = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.foundFiles = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // recurCheckBox
@@ -157,11 +158,21 @@
             this.label4.TabIndex = 11;
             this.label4.Text = "Search Term";
             // 
+            // foundFiles
+            // 
+            this.foundFiles.FormattingEnabled = true;
+            this.foundFiles.ItemHeight = 15;
+            this.foundFiles.Location = new System.Drawing.Point(321, 321);
+            this.foundFiles.Name = "foundFiles";
+            this.foundFiles.Size = new System.Drawing.Size(120, 94);
+            this.foundFiles.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.foundFiles);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.upperBound);
@@ -198,5 +209,6 @@
         private TextBox upperBound;
         private Label label3;
         private Label label4;
+        private ListBox foundFiles;
     }
 }
