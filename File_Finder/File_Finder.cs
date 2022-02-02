@@ -1,8 +1,8 @@
 
 
 namespace File_Finder {
-    public partial class Form1 : Form {
-        public Form1() {
+    public partial class File_Finder : Form {
+        public File_Finder() {
             InitializeComponent();
         }
 
@@ -40,16 +40,22 @@ namespace File_Finder {
 
             //Clear results box
             foundFiles.Items.Clear();
+            List<string> results = new List<string>();
 
             //Instantiate search object
-            //Search search = new Search(path, recursive, fileTypes);
-            Search search = new Search("\\\\upifile1\\vidar", false, ".pdf");
+            //Search search = new Search(path, fileTypes);
+            Search search = new Search("\\\\upifile1\\vidar", ".pdf"); //For testing
 
             if (searchType == "Keyword Phrase") {
                 string searchTerm = phraseTextBox.Text;
-                List<string> results = search.phraseSearch(searchTerm);
-                System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
 
+                if (recursive) {
+                
+                } else {
+                    results = search.phraseSearch(searchTerm);
+                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
+                }
+                
                 foreach (var filepath in results) {
                     foundFiles.Items.Add(filepath);
                     System.Diagnostics.Debug.WriteLine("Added " + filepath);

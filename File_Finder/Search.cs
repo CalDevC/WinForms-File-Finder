@@ -9,11 +9,9 @@ namespace File_Finder {
 
         private string[] fileTypes;
         private string path;
-        private bool recursive;
 
-        public Search(string path, bool recursive, string fileTypes) {
+        public Search(string path, string fileTypes) {
             this.path = path;
-            this.recursive = recursive;
             this.fileTypes = fileTypes.Split(',');
         }
 
@@ -21,22 +19,22 @@ namespace File_Finder {
             List<string> foundFiles = new List<string>();
             //For each file type
             foreach (var type in this.fileTypes) {
-                if (recursive) {
-                    //do a recursive search
-                } else {
-                    //Get all file names of the current type that contain the search term
-                    var fileList = Directory.GetFiles(path, "*" + type);
-                    foreach (string filepath in fileList) {
-                        string filename = filepath.Split("\\").Last();
-                        if (filename.Contains(searchTerm)) {
-                            foundFiles.Add(filepath);  //Append the found file names to temp found
-                            System.Diagnostics.Debug.WriteLine(filepath + "   " + foundFiles.Count);
-                        }
+                //Get all file names of the current type that contain the search term
+                var fileList = Directory.GetFiles(path, "*" + type);
+                foreach (string filepath in fileList) {
+                    string filename = filepath.Split("\\").Last();
+                    if (filename.Contains(searchTerm)) {
+                        foundFiles.Add(filepath);  //Append the found file names to temp found
+                        System.Diagnostics.Debug.WriteLine(filepath + "   " + foundFiles.Count);
                     }
                 }
             }
 
             return foundFiles;      
+        }
+
+        public List<string> phraseSearchRecur() {
+
         }
 
         public void rangeSearch(int lower, int upper) {

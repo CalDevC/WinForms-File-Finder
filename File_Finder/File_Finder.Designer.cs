@@ -1,6 +1,6 @@
 ﻿namespace File_Finder
 {
-    partial class Form1
+    partial class File_Finder
     {
         /// <summary>
         ///  Required designer variable.
