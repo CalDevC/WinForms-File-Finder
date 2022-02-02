@@ -36,21 +36,19 @@ namespace File_Finder {
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
-            string searchTerm;
+            Search search = new Search(path, recursive);
 
-            var fileList = Directory.GetFiles(path);
-            foreach (var file in fileList) {
-                System.Diagnostics.Debug.WriteLine(file);
-            }
+
+            
 
             if (searchType == "Keyword Phrase") {
-                searchTerm = phraseTextBox.Text;
-                Search search = new Search(path, recursive, searchTerm);
+                string searchTerm = phraseTextBox.Text;
+                search.phraseSearch(searchTerm);
 
             } else if(searchType == "Number Range") {
-                //int lower = Int32.Parse(lowerBound.Text);
-                //int upper = Int32.Parse(upperBound.Text);
-                searchTerm = lowerBound.Text + "-" + upperBound.Text;
+                int lower = Int32.Parse(lowerBound.Text);
+                int upper = Int32.Parse(upperBound.Text);
+                search.rangeSearch(lower, upper);
             } else {
                 //Select a seach type
             }
