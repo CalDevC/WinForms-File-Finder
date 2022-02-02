@@ -43,14 +43,15 @@ namespace File_Finder {
             List<string> results = new List<string>();
 
             //Instantiate search object
-            //Search search = new Search(path, fileTypes);
-            Search search = new Search("\\\\upifile1\\vidar", ".pdf"); //For testing
+            Search search = new Search(path, fileTypes);
+            //Search search = new Search("\\\\upifile1\\vidar", ".pdf"); //For testing
 
             if (searchType == "Keyword Phrase") {
                 string searchTerm = phraseTextBox.Text;
 
                 if (recursive) {
-                
+                    results = search.phraseSearchRecur(searchTerm, path);
+                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
                 } else {
                     results = search.phraseSearch(searchTerm);
                     System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
