@@ -47,7 +47,7 @@
             this.recurCheckBox.AutoSize = true;
             this.recurCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.recurCheckBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.recurCheckBox.Location = new System.Drawing.Point(273, 228);
+            this.recurCheckBox.Location = new System.Drawing.Point(253, 144);
             this.recurCheckBox.Name = "recurCheckBox";
             this.recurCheckBox.Size = new System.Drawing.Size(120, 20);
             this.recurCheckBox.TabIndex = 0;
@@ -57,7 +57,7 @@
             // pathTextBox
             // 
             this.pathTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.pathTextBox.Location = new System.Drawing.Point(273, 110);
+            this.pathTextBox.Location = new System.Drawing.Point(253, 26);
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(325, 23);
             this.pathTextBox.TabIndex = 1;
@@ -66,7 +66,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(198, 113);
+            this.label1.Location = new System.Drawing.Point(178, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(69, 15);
             this.label1.TabIndex = 2;
@@ -76,7 +76,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label2.Location = new System.Drawing.Point(210, 152);
+            this.label2.Location = new System.Drawing.Point(190, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(57, 15);
             this.label2.TabIndex = 4;
@@ -85,7 +85,7 @@
             // fileTypesTextBox
             // 
             this.fileTypesTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.fileTypesTextBox.Location = new System.Drawing.Point(273, 149);
+            this.fileTypesTextBox.Location = new System.Drawing.Point(253, 65);
             this.fileTypesTextBox.Name = "fileTypesTextBox";
             this.fileTypesTextBox.Size = new System.Drawing.Size(325, 23);
             this.fileTypesTextBox.TabIndex = 3;
@@ -98,7 +98,7 @@
             this.searchTermType.Items.AddRange(new object[] {
             "Keyword Phrase",
             "Number Range"});
-            this.searchTermType.Location = new System.Drawing.Point(273, 189);
+            this.searchTermType.Location = new System.Drawing.Point(253, 105);
             this.searchTermType.Name = "searchTermType";
             this.searchTermType.Size = new System.Drawing.Size(325, 23);
             this.searchTermType.TabIndex = 5;
@@ -106,7 +106,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(362, 346);
+            this.button1.Location = new System.Drawing.Point(342, 262);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 6;
@@ -117,21 +117,21 @@
             // phraseTextBox
             // 
             this.phraseTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.phraseTextBox.Location = new System.Drawing.Point(273, 254);
+            this.phraseTextBox.Location = new System.Drawing.Point(253, 170);
             this.phraseTextBox.Name = "phraseTextBox";
             this.phraseTextBox.Size = new System.Drawing.Size(325, 23);
             this.phraseTextBox.TabIndex = 7;
             // 
             // lowerBound
             // 
-            this.lowerBound.Location = new System.Drawing.Point(273, 254);
+            this.lowerBound.Location = new System.Drawing.Point(253, 170);
             this.lowerBound.Name = "lowerBound";
             this.lowerBound.Size = new System.Drawing.Size(100, 23);
             this.lowerBound.TabIndex = 8;
             // 
             // upperBound
             // 
-            this.upperBound.Location = new System.Drawing.Point(409, 254);
+            this.upperBound.Location = new System.Drawing.Point(389, 170);
             this.upperBound.Name = "upperBound";
             this.upperBound.Size = new System.Drawing.Size(100, 23);
             this.upperBound.TabIndex = 9;
@@ -141,7 +141,7 @@
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label3.Location = new System.Drawing.Point(379, 245);
+            this.label3.Location = new System.Drawing.Point(359, 161);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 32);
             this.label3.TabIndex = 10;
@@ -151,7 +151,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(196, 257);
+            this.label4.Location = new System.Drawing.Point(176, 173);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(71, 15);
             this.label4.TabIndex = 11;

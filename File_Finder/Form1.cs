@@ -36,14 +36,15 @@ namespace File_Finder {
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
-            Search search = new Search(path, recursive);
+            string fileTypes = fileTypesTextBox.Text;
+            Search search = new Search(path, recursive, fileTypes);
 
 
             
 
             if (searchType == "Keyword Phrase") {
                 string searchTerm = phraseTextBox.Text;
-                search.phraseSearch(searchTerm);
+                string[] results = search.phraseSearch(searchTerm);
 
             } else if(searchType == "Number Range") {
                 int lower = Int32.Parse(lowerBound.Text);
