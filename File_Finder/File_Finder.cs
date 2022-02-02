@@ -65,7 +65,19 @@ namespace File_Finder {
             } else if(searchType == "Number Range") {
                 int lower = Int32.Parse(lowerBound.Text);
                 int upper = Int32.Parse(upperBound.Text);
-                search.rangeSearch(lower, upper);
+
+                if (recursive) {
+
+                } else {
+                    results = search.rangeSearch(lower, upper);
+                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
+                }
+
+                foreach (var filepath in results) {
+                    foundFiles.Items.Add(filepath);
+                    System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                }
+
             } else {
                 //Select a seach type
             }
