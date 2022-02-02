@@ -37,7 +37,7 @@ namespace File_Finder {
             List<string> foundFiles = new List<string>();
             //For each directory including the root one
             foreach (var directory in Directory.GetDirectories(path)) {
-                foundFiles.Concat(phraseSearchRecur(searchTerm, directory));
+                foundFiles.AddRange(phraseSearchRecur(searchTerm, directory));
             }
             //For each file type
             foreach (var type in fileTypes) {

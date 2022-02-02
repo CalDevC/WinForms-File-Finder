@@ -162,12 +162,13 @@
             // 
             this.foundFiles.FormattingEnabled = true;
             this.foundFiles.ItemHeight = 15;
-            this.foundFiles.Location = new System.Drawing.Point(321, 321);
+            this.foundFiles.Location = new System.Drawing.Point(253, 317);
             this.foundFiles.Name = "foundFiles";
-            this.foundFiles.Size = new System.Drawing.Size(120, 94);
+            this.foundFiles.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.foundFiles.Size = new System.Drawing.Size(325, 94);
             this.foundFiles.TabIndex = 12;
             // 
-            // Form1
+            // File_Finder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -185,7 +186,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pathTextBox);
             this.Controls.Add(this.recurCheckBox);
-            this.Name = "Form1";
+            this.Name = "File_Finder";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
