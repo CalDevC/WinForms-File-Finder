@@ -35,15 +35,17 @@ namespace File_Finder {
         private void button1_Click(object sender, EventArgs e) {
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
+            bool recursive = recurCheckBox.Checked;
             string searchTerm;
 
-            var fileList = Directory.GetDirectories(path);
+            var fileList = Directory.GetFiles(path);
             foreach (var file in fileList) {
                 System.Diagnostics.Debug.WriteLine(file);
             }
 
             if (searchType == "Keyword Phrase") {
                 searchTerm = phraseTextBox.Text;
+                Search search = new Search(path, recursive, searchTerm);
 
             } else if(searchType == "Number Range") {
                 //int lower = Int32.Parse(lowerBound.Text);
