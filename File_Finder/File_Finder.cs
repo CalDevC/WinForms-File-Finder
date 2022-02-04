@@ -12,6 +12,7 @@ namespace File_Finder {
             upperBound.Hide();
             label3.Hide();
             label4.Hide();
+            label5.Hide();
         }
 
         private void searchTermType_Change(object sender, EventArgs e) {
@@ -37,14 +38,15 @@ namespace File_Finder {
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
+            Search search = new Search(path, fileTypes);
+            Utils util = new Utils();
 
             //Clear results box and make new result List
             foundFiles.Items.Clear();
             List<string> results = new List<string>();
 
-            //Instantiate search object
-            Search search = new Search(path, fileTypes);
-            //Search search = new Search("\\\\upifile1\\vidar", ".pdf"); //For testing
+            //button1.Hide();
+            //label5.Show();
 
             if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                 string searchTerm = phraseTextBox.Text;
@@ -58,7 +60,6 @@ namespace File_Finder {
                 foreach (var filepath in results) {
                     string filename = filepath.Split("\\").Last();
                     foundFiles.Items.Add(filename);
-                    System.Diagnostics.Debug.WriteLine("Added " + filename);
                 }
 
             } else if(searchType == "Number Range") {  //RANGE SEARCH
@@ -74,12 +75,13 @@ namespace File_Finder {
                 foreach (var filepath in results) {
                     string filename = filepath.Split("\\").Last();
                     foundFiles.Items.Add(filename);
-                    System.Diagnostics.Debug.WriteLine("Added: " + filename);
                 }
 
             } else {
                 //Select a seach type
             }
+            //button1.Show();
+            //label5.Show();
 
         }
 

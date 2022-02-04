@@ -32,6 +32,7 @@ namespace File_Finder {
                     string filename = filepath.Split("\\").Last();
                     if (filename.Contains(searchTerm)) {
                         foundFiles.Add(filepath);  //Append the found file names to temp found
+                        System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
                 }
             }
@@ -49,7 +50,21 @@ namespace File_Finder {
                 foundFiles.AddRange(phraseSearchRecur(searchTerm, directory));
             }
 
-            foundFiles.AddRange(phraseSearch(searchTerm));  //Find matches
+            //For each file type
+            foreach (var type in fileTypes) {
+
+                //Get all file names of the current type that contain the search term
+                var fileList = Directory.GetFiles(path, "*" + type);
+
+                //Get all filenames that contain the search term
+                foreach (string filepath in fileList) {
+                    string filename = filepath.Split("\\").Last();
+                    if (filename.Contains(searchTerm)) {
+                        foundFiles.Add(filepath);  //Append the found file names to temp found
+                        System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                    }
+                }
+            }
 
             return foundFiles;
         }
@@ -61,7 +76,21 @@ namespace File_Finder {
 
             //For each number in the range
             for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
-                foundFiles.AddRange( phraseSearch(searchTerm.ToString()) );  //Find matches
+                //For each file type
+                foreach (var type in fileTypes) {
+
+                    //Get all file names of the current type that contain the search term
+                    var fileList = Directory.GetFiles(path, "*" + type);
+
+                    //Get all filenames that contain the search term
+                    foreach (string filepath in fileList) {
+                        string filename = filepath.Split("\\").Last();
+                        if (filename.Contains(searchTerm.ToString())) {
+                            foundFiles.Add(filepath);  //Append the found file names to temp found
+                            System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                        }
+                    }
+                }
             }
 
             return foundFiles;
@@ -80,7 +109,21 @@ namespace File_Finder {
                     foundFiles.AddRange(rangeSearchRecur(lower, upper, directory));
                 }
 
-                foundFiles.AddRange( phraseSearch(searchTerm.ToString()) );  //Find matches
+                //For each file type
+                foreach (var type in fileTypes) {
+
+                    //Get all file names of the current type that contain the search term
+                    var fileList = Directory.GetFiles(path, "*" + type);
+
+                    //Get all filenames that contain the search term
+                    foreach (string filepath in fileList) {
+                        string filename = filepath.Split("\\").Last();
+                        if (filename.Contains(searchTerm.ToString())) {
+                            foundFiles.Add(filepath);  //Append the found file names to temp found
+                            System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                        }
+                    }
+                }
             }
 
             return foundFiles;
