@@ -38,7 +38,7 @@ namespace File_Finder {
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
 
-            //Clear results box
+            //Clear results box and make new result List
             foundFiles.Items.Clear();
             List<string> results = new List<string>();
 
@@ -46,37 +46,35 @@ namespace File_Finder {
             Search search = new Search(path, fileTypes);
             //Search search = new Search("\\\\upifile1\\vidar", ".pdf"); //For testing
 
-            if (searchType == "Keyword Phrase") {
+            if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                 string searchTerm = phraseTextBox.Text;
 
-                if (recursive) {
+                if (recursive)
                     results = search.phraseSearchRecur(searchTerm, path);
-                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
-                } else {
+                else
                     results = search.phraseSearch(searchTerm);
-                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
-                }
-                
+
+                //Output found files to the form
                 foreach (var filepath in results) {
-                    foundFiles.Items.Add(filepath);
-                    System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                    string filename = filepath.Split("\\").Last();
+                    foundFiles.Items.Add(filename);
+                    System.Diagnostics.Debug.WriteLine("Added " + filename);
                 }
 
-            } else if(searchType == "Number Range") {
+            } else if(searchType == "Number Range") {  //RANGE SEARCH
                 int lower = Int32.Parse(lowerBound.Text);
                 int upper = Int32.Parse(upperBound.Text);
 
-                if (recursive) {
+                if (recursive)
                     results = search.rangeSearchRecur(lower, upper, path);
-                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
-                } else {
+                else
                     results = search.rangeSearch(lower, upper);
-                    System.Diagnostics.Debug.WriteLine("Exited function\n" + results.Count);
-                }
 
+                //Output found files to the form
                 foreach (var filepath in results) {
-                    foundFiles.Items.Add(filepath);
-                    System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                    string filename = filepath.Split("\\").Last();
+                    foundFiles.Items.Add(filename);
+                    System.Diagnostics.Debug.WriteLine("Added: " + filename);
                 }
 
             } else {
