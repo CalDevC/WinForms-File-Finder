@@ -132,7 +132,6 @@ namespace File_Finder {
         //***** Recursive range search *****//
         public Dictionary<string, bool> rangeSearchRecur(int lower, int upper, string path) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
-            int prevCount = 0;
 
             //For each number in the range
             for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
@@ -163,22 +162,11 @@ namespace File_Finder {
                             if (!results.ContainsKey(filepath)) {
                                 results.Add(filepath, true);  //Append the found file
                                 System.Diagnostics.Debug.WriteLine("Added " + filepath);
-                            } else if (results.ContainsKey(filepath)) {
-                                consoleLog("Found a previously found file when looking for " + searchTerm.ToString());
-                                prevCount--;
-                            }
-                            
+                            } 
                         }
                     }
                 }
 
-                //If term was not found
-                //if (results.Count == prevCount) {
-                //    results.Add(searchTerm.ToString(), false);
-                //    prevCount = results.Count;
-                //} else {
-                //    prevCount = results.Count;
-                //}
                 bool notFound = true;
                 foreach(var entry in results) {
                     if (entry.Key.Contains(searchTerm.ToString())) {
