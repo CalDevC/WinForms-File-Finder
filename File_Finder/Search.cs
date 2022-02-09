@@ -19,7 +19,6 @@ namespace File_Finder {
 
         //***** Non-recursive phrase search *****//
         public Dictionary<string, bool> phraseSearch(string searchTerm) {
-            //List<string> foundFiles = new List<string>();
             Dictionary<string, bool> results = new Dictionary<string, bool> ();
 
             //For each file type
@@ -48,12 +47,12 @@ namespace File_Finder {
 
 
         //***** Recursive phrase search *****//
-        public List<string> phraseSearchRecur(string searchTerm, string path) {
-            List<string> foundFiles = new List<string>();
+        public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
+            Dictionary<string, bool> results = new Dictionary<string, bool>();
 
             //For each found directory do a recursive phrase search
             foreach (var directory in Directory.GetDirectories(path)) {
-                foundFiles.AddRange(phraseSearchRecur(searchTerm, directory));
+                phraseSearchRecur(searchTerm, directory).ToList().ForEach(x => results.Add(x.Key, x.Value));
             }
 
             //For each file type
@@ -66,13 +65,17 @@ namespace File_Finder {
                 foreach (string filepath in fileList) {
                     string filename = filepath.Split("\\").Last();
                     if (filename.Contains(searchTerm)) {
-                        foundFiles.Add(filepath);  //Append the found file names to temp found
+                        results.Add(filepath, true);  //Append the found file names to temp found
                         System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
                 }
             }
 
-            return foundFiles;
+            if (results.Count == 0) {
+                results.Add(searchTerm, false);
+            }
+
+            return results;
         }
 
 
@@ -106,6 +109,9 @@ namespace File_Finder {
                     prevCount = foundFiles.Count;
                 }
             }
+
+            //Add foundFiles to dictionary
+
 
             return foundFiles;
         }
