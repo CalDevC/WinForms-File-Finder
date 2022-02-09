@@ -50,10 +50,19 @@ namespace File_Finder {
         //***** Recursive phrase search *****//
         public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
+            searchTerm = searchTerm.ToLower();
 
             //For each found directory do a recursive phrase search
             foreach (var directory in Directory.GetDirectories(path)) {
-                phraseSearchRecur(searchTerm, directory).ToList().ForEach(x => results[x.Key] = x.Value);
+                Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
+
+                //Remove any non-detections that may have been added by a subdirectory
+                foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
+                    subdirResults.Remove(item.Key);
+                }
+
+                //Combine the subdirectory results with the overall results
+                subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
             }
 
             //For each file type
@@ -65,7 +74,7 @@ namespace File_Finder {
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
                     string filename = filepath.Split("\\").Last();
-                    if (filename.Contains(searchTerm)) {
+                    if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
                         System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
