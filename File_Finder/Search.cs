@@ -18,8 +18,9 @@ namespace File_Finder {
 
 
         //***** Non-recursive phrase search *****//
-        public List<string> phraseSearch(string searchTerm) {
-            List<string> foundFiles = new List<string>();
+        public Dictionary<string, bool> phraseSearch(string searchTerm) {
+            //List<string> foundFiles = new List<string>();
+            Dictionary<string, bool> results = new Dictionary<string, bool> ();
 
             //For each file type
             foreach (var type in fileTypes) {
@@ -31,13 +32,18 @@ namespace File_Finder {
                 foreach (string filepath in fileList) {
                     string filename = filepath.Split("\\").Last();
                     if (filename.Contains(searchTerm)) {
-                        foundFiles.Add(filepath);  //Append the found file names to temp found
+                        results.Add(filepath, true);  //Append the found file names to temp found
                         System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
+                    
                 }
             }
 
-            return foundFiles;      
+            if(results.Count == 0) {
+                results.Add (searchTerm, false);
+            }
+
+            return results;      
         }
 
 
@@ -73,6 +79,7 @@ namespace File_Finder {
         //***** Non-recursive range search *****//
         public List<string> rangeSearch(int lower, int upper) {
             List<string> foundFiles = new List<string>();
+            int prevCount = 0;
 
             //For each number in the range
             for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
@@ -90,6 +97,13 @@ namespace File_Finder {
                             System.Diagnostics.Debug.WriteLine("Added " + filepath);
                         }
                     }
+                }
+
+                //If term was not found
+                if (foundFiles.Count == prevCount) {
+                    
+                } else {
+                    prevCount = foundFiles.Count;
                 }
             }
 

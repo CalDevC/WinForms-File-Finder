@@ -12,7 +12,6 @@ namespace File_Finder {
             upperBound.Hide();
             label3.Hide();
             label4.Hide();
-            label5.Hide();
         }
 
         private void searchTermType_Change(object sender, EventArgs e) {
@@ -39,14 +38,12 @@ namespace File_Finder {
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
             Search search = new Search(path, fileTypes);
-            Utils util = new Utils();
 
             //Clear results box and make new result List
             foundFiles.Items.Clear();
             List<string> results = new List<string>();
 
-            //button1.Hide();
-            //label5.Show();
+            
 
             if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                 string searchTerm = phraseTextBox.Text;
@@ -80,8 +77,10 @@ namespace File_Finder {
             } else {
                 //Select a seach type
             }
-            //button1.Show();
-            //label5.Show();
+
+        }
+
+        public void recordNotFound(string term) {
 
         }
 

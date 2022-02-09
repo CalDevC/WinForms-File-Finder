@@ -41,7 +41,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.foundFiles = new System.Windows.Forms.ListBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.notDetected = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // recurCheckBox
@@ -169,22 +169,22 @@
             this.foundFiles.Size = new System.Drawing.Size(325, 94);
             this.foundFiles.TabIndex = 12;
             // 
-            // label5
+            // notDetected
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label5.Location = new System.Drawing.Point(423, 262);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(83, 20);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "Searching...";
+            this.notDetected.FormattingEnabled = true;
+            this.notDetected.ItemHeight = 15;
+            this.notDetected.Location = new System.Drawing.Point(253, 417);
+            this.notDetected.Name = "notDetected";
+            this.notDetected.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.notDetected.Size = new System.Drawing.Size(325, 94);
+            this.notDetected.TabIndex = 13;
             // 
             // File_Finder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.label5);
+            this.ClientSize = new System.Drawing.Size(657, 619);
+            this.Controls.Add(this.notDetected);
             this.Controls.Add(this.foundFiles);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -223,6 +223,6 @@
         private Label label3;
         private Label label4;
         private ListBox foundFiles;
-        private Label label5;
+        private ListBox notDetected;
     }
 }
