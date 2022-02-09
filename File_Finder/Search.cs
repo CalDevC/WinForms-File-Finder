@@ -96,9 +96,10 @@ namespace File_Finder {
 
             //For each number in the range
             for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
+                System.Diagnostics.Debug.WriteLine("Looking for " + searchTerm.ToString());
+
                 //For each file type
                 foreach (var type in fileTypes) {
-
                     //Get all file names of the current type that contain the search term
                     var fileList = Directory.GetFiles(path, "*" + type);
 
@@ -113,8 +114,10 @@ namespace File_Finder {
                 }
 
                 //If term was not found
+                System.Diagnostics.Debug.WriteLine("Checking if found " + searchTerm.ToString());
                 if (results.Count == prevCount) {
                     results.Add(searchTerm.ToString(), false);
+                    prevCount = results.Count;
                 } else {
                     prevCount = results.Count;
                 }
