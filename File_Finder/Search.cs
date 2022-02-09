@@ -20,6 +20,7 @@ namespace File_Finder {
         //***** Non-recursive phrase search *****//
         public Dictionary<string, bool> phraseSearch(string searchTerm) {
             Dictionary<string, bool> results = new Dictionary<string, bool> ();
+            searchTerm = searchTerm.ToLower();
 
             //For each file type
             foreach (var type in fileTypes) {
@@ -30,7 +31,7 @@ namespace File_Finder {
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
                     string filename = filepath.Split("\\").Last();
-                    if (filename.Contains(searchTerm)) {
+                    if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
                         System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
