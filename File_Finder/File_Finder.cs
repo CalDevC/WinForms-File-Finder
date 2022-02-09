@@ -1,8 +1,4 @@
 
-///TODO: 
-///make search case insensitive
-///test other searches for bugs
-
 namespace File_Finder {
     public partial class File_Finder : Form {
         public File_Finder() {

@@ -16,6 +16,10 @@ namespace File_Finder {
             this.fileTypes = fileTypes.Split(',');
         }
 
+        //***** Output writer *****//
+        private void consoleLog(string msg) {
+            System.Diagnostics.Debug.WriteLine(msg);
+        }
 
         //***** Non-recursive phrase search *****//
         public Dictionary<string, bool> phraseSearch(string searchTerm) {
@@ -155,25 +159,38 @@ namespace File_Finder {
                     //Get all filenames that contain the search term
                     foreach (string filepath in fileList) {
                         string filename = filepath.Split("\\").Last();
-                        if (filename.Contains(searchTerm.ToString())) {
-                            if (results.ContainsKey(filename)) {
-                                prevCount++;
-                            } else {
-                                results.Add(filepath, true);  //Append the found file names to temp found
+                        if ( filename.Contains(searchTerm.ToString()) ) {
+                            if (!results.ContainsKey(filepath)) {
+                                results.Add(filepath, true);  //Append the found file
+                                System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                            } else if (results.ContainsKey(filepath)) {
+                                consoleLog("Found a previously found file when looking for " + searchTerm.ToString());
+                                prevCount--;
                             }
-                              
-                            System.Diagnostics.Debug.WriteLine("Added " + filepath);
+                            
                         }
                     }
                 }
 
                 //If term was not found
-                if (results.Count == prevCount) {
-                    results.Add(searchTerm.ToString(), false);
-                    prevCount = results.Count;
-                } else {
-                    prevCount = results.Count;
+                //if (results.Count == prevCount) {
+                //    results.Add(searchTerm.ToString(), false);
+                //    prevCount = results.Count;
+                //} else {
+                //    prevCount = results.Count;
+                //}
+                bool notFound = true;
+                foreach(var entry in results) {
+                    if (entry.Key.Contains(searchTerm.ToString())) {
+                        notFound = false;
+                        break;
+                    }
                 }
+
+                if (notFound) {
+                    results.Add(searchTerm.ToString(), false);
+                }
+                
 
             }
 
