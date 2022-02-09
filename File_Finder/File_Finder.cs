@@ -41,9 +41,7 @@ namespace File_Finder {
 
             //Clear results box and make new result List
             foundFiles.Items.Clear();
-            List<string> results = new List<string>();
-
-            
+            Dictionary<string, bool> results = new Dictionary<string, bool>();
 
             if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                 string searchTerm = phraseTextBox.Text;
@@ -54,9 +52,16 @@ namespace File_Finder {
                     results = search.phraseSearch(searchTerm);
 
                 //Output found files to the form
-                foreach (var filepath in results) {
-                    string filename = filepath.Split("\\").Last();
-                    foundFiles.Items.Add(filename);
+                foreach (KeyValuePair<string, bool> entry in results) {
+                    if (entry.Value == true) {
+                        string filename = entry.Key.Split("\\").Last();
+                        foundFiles.Items.Add(filename);
+                    } else if (entry.Value == false) {
+                        notDetected.Items.Add(entry.Key);
+                    } else {
+                        //Error
+                    }
+                    
                 }
 
             } else if(searchType == "Number Range") {  //RANGE SEARCH
@@ -69,9 +74,16 @@ namespace File_Finder {
                     results = search.rangeSearch(lower, upper);
 
                 //Output found files to the form
-                foreach (var filepath in results) {
-                    string filename = filepath.Split("\\").Last();
-                    foundFiles.Items.Add(filename);
+                foreach (KeyValuePair<string, bool> entry in results) {
+                    if (entry.Value == true) {
+                        string filename = entry.Key.Split("\\").Last();
+                        foundFiles.Items.Add(filename);
+                    } else if (entry.Value == false) {
+                        notDetected.Items.Add(entry.Key);
+                    } else {
+                        //Error
+                    }
+
                 }
 
             } else {
