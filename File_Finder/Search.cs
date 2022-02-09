@@ -52,7 +52,7 @@ namespace File_Finder {
 
             //For each found directory do a recursive phrase search
             foreach (var directory in Directory.GetDirectories(path)) {
-                phraseSearchRecur(searchTerm, directory).ToList().ForEach(x => results.Add(x.Key, x.Value));
+                phraseSearchRecur(searchTerm, directory).ToList().ForEach(x => results[x.Key] = x.Value);
             }
 
             //For each file type
@@ -124,7 +124,7 @@ namespace File_Finder {
 
                 //For each found directory do a recursive range search
                 foreach (var directory in Directory.GetDirectories(path)) {
-                    rangeSearchRecur(lower, upper, directory).ToList().ForEach(x => results.Add(x.Key, x.Value));
+                    rangeSearchRecur(lower, upper, directory).ToList().ForEach(x => results[x.Key] = x.Value);
                 }
 
                 //For each file type
