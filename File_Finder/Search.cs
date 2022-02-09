@@ -80,8 +80,8 @@ namespace File_Finder {
 
 
         //***** Non-recursive range search *****//
-        public List<string> rangeSearch(int lower, int upper) {
-            List<string> foundFiles = new List<string>();
+        public Dictionary<string, bool> rangeSearch(int lower, int upper) {
+            Dictionary<string, bool> results = new Dictionary<string, bool>();
             int prevCount = 0;
 
             //For each number in the range
@@ -96,24 +96,21 @@ namespace File_Finder {
                     foreach (string filepath in fileList) {
                         string filename = filepath.Split("\\").Last();
                         if (filename.Contains(searchTerm.ToString())) {
-                            foundFiles.Add(filepath);  //Append the found file names to temp found
+                            results.Add(filepath, true);  //Append the found file names to temp found
                             System.Diagnostics.Debug.WriteLine("Added " + filepath);
                         }
                     }
                 }
 
                 //If term was not found
-                if (foundFiles.Count == prevCount) {
-                    
+                if (results.Count == prevCount) {
+                    results.Add(searchTerm.ToString(), false);
                 } else {
-                    prevCount = foundFiles.Count;
+                    prevCount = results.Count;
                 }
             }
 
-            //Add foundFiles to dictionary
-
-
-            return foundFiles;
+            return results;
         }
 
 
