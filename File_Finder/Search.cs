@@ -156,7 +156,12 @@ namespace File_Finder {
                     foreach (string filepath in fileList) {
                         string filename = filepath.Split("\\").Last();
                         if (filename.Contains(searchTerm.ToString())) {
-                            results.Add(filepath, true);  //Append the found file names to temp found
+                            if (results.ContainsKey(filename)) {
+                                prevCount++;
+                            } else {
+                                results.Add(filepath, true);  //Append the found file names to temp found
+                            }
+                              
                             System.Diagnostics.Debug.WriteLine("Added " + filepath);
                         }
                     }
