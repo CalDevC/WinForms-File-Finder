@@ -115,15 +115,16 @@ namespace File_Finder {
 
 
         //***** Recursive range search *****//
-        public List<string> rangeSearchRecur(int lower, int upper, string path) {
-            List<string> foundFiles = new List<string>();
+        public Dictionary<string, bool> rangeSearchRecur(int lower, int upper, string path) {
+            Dictionary<string, bool> results = new Dictionary<string, bool>();
+            int prevCount = 0;
 
             //For each number in the range
             for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
 
                 //For each found directory do a recursive range search
                 foreach (var directory in Directory.GetDirectories(path)) {
-                    foundFiles.AddRange(rangeSearchRecur(lower, upper, directory));
+                    rangeSearchRecur(lower, upper, directory).ToList().ForEach(x => results.Add(x.Key, x.Value));
                 }
 
                 //For each file type
@@ -136,14 +137,22 @@ namespace File_Finder {
                     foreach (string filepath in fileList) {
                         string filename = filepath.Split("\\").Last();
                         if (filename.Contains(searchTerm.ToString())) {
-                            foundFiles.Add(filepath);  //Append the found file names to temp found
+                            results.Add(filepath, true);  //Append the found file names to temp found
                             System.Diagnostics.Debug.WriteLine("Added " + filepath);
                         }
                     }
                 }
+
+                //If term was not found
+                if (results.Count == prevCount) {
+                    results.Add(searchTerm.ToString(), false);
+                } else {
+                    prevCount = results.Count;
+                }
+
             }
 
-            return foundFiles;
+            return results;
         }
 
 
