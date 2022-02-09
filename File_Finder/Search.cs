@@ -134,7 +134,15 @@ namespace File_Finder {
 
                 //For each found directory do a recursive range search
                 foreach (var directory in Directory.GetDirectories(path)) {
-                    rangeSearchRecur(lower, upper, directory).ToList().ForEach(x => results[x.Key] = x.Value);
+                    Dictionary<string, bool> subdirResults = rangeSearchRecur(lower, upper, directory);
+
+                    //Remove any non-detections that may have been added by a subdirectory
+                    foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
+                        subdirResults.Remove(item.Key);
+                    }
+
+                    //Combine the subdirectory results with the overall results
+                    subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
                 }
 
                 //For each file type
