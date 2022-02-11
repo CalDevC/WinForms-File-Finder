@@ -92,9 +92,5 @@ namespace File_Finder {
 
         }
 
-        public void recordNotFound(string term) {
-
-        }
-
     }
 }
