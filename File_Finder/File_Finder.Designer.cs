@@ -167,6 +167,7 @@
             // foundFiles
             // 
             this.foundFiles.FormattingEnabled = true;
+            this.foundFiles.HorizontalScrollbar = true;
             this.foundFiles.ItemHeight = 15;
             this.foundFiles.Location = new System.Drawing.Point(189, 314);
             this.foundFiles.Name = "foundFiles";
@@ -177,6 +178,7 @@
             // notDetected
             // 
             this.notDetected.FormattingEnabled = true;
+            this.notDetected.HorizontalScrollbar = true;
             this.notDetected.ItemHeight = 15;
             this.notDetected.Location = new System.Drawing.Point(189, 539);
             this.notDetected.Name = "notDetected";
