@@ -96,19 +96,18 @@ namespace File_Finder {
         //***** Non-recursive range search *****//
         public Dictionary<string, bool> rangeSearch(int lower, int upper) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
-            int prevCount = 0;
 
-            //For each number in the range
-            for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
+            //For each file type
+            foreach (var type in fileTypes) {
+                //Get all file names of the current type that contain the search term
+                var fileList = Directory.GetFiles(path, "*" + type);
 
-                //For each file type
-                foreach (var type in fileTypes) {
-                    //Get all file names of the current type that contain the search term
-                    var fileList = Directory.GetFiles(path, "*" + type);
+                //Get all filenames that contain the search term
+                foreach (string filepath in fileList) {
+                    string filename = filepath.Split("\\").Last();
 
-                    //Get all filenames that contain the search term
-                    foreach (string filepath in fileList) {
-                        string filename = filepath.Split("\\").Last();
+                    //For each number in the range
+                    for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
                         if (filename.Contains(searchTerm.ToString())) {
                             if (!results.ContainsKey(filepath)) {
                                 results.Add(filepath, true);  //Append the found file
@@ -117,13 +116,20 @@ namespace File_Finder {
                         }
                     }
                 }
+            }
 
-                //If term was not found
-                if (results.Count == prevCount) {
+            //If term was not found
+            for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
+                bool notFound = true;
+                foreach (var entry in results) {
+                    if (entry.Key.Contains(searchTerm.ToString())) {
+                        notFound = false;
+                        break;
+                    }
+                }
+
+                if (notFound) {
                     results.Add(searchTerm.ToString(), false);
-                    prevCount = results.Count;
-                } else {
-                    prevCount = results.Count;
                 }
             }
 
