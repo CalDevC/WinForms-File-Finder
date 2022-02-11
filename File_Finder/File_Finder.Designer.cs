@@ -226,7 +226,6 @@
             this.foundFilesPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.foundFilesPath.Size = new System.Drawing.Size(325, 94);
             this.foundFilesPath.TabIndex = 16;
-            this.foundFilesPath.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // label8
             // 

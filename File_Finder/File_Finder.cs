@@ -30,6 +30,24 @@ namespace File_Finder {
             }
         }
 
+        //Output results to the GUI
+        private void outputResults(Dictionary<string, bool> results) {
+            //Output found files to the form
+            foreach (KeyValuePair<string, bool> entry in results) {
+                if (entry.Value == true) {
+                    string filepath = entry.Key;
+                    string filename = filepath.Split("\\").Last();
+                    foundFiles.Items.Add(filename);
+                    foundFilesPath.Items.Add(filepath);
+                } else if (entry.Value == false) {
+                    notDetected.Items.Add(entry.Key);
+                } else {
+                    //Error
+                }
+
+            }
+        }
+
         //Search button clicked
         private void button1_Click(object sender, EventArgs e) {
             button1.Cursor = Cursors.WaitCursor;
@@ -54,19 +72,7 @@ namespace File_Finder {
                     results = search.phraseSearch(searchTerm);
 
                 //Output found files to the form
-                foreach (KeyValuePair<string, bool> entry in results) {
-                    if (entry.Value == true) {
-                        string filepath = entry.Key;
-                        string filename = filepath.Split("\\").Last();
-                        foundFiles.Items.Add(filename);
-                        foundFilesPath.Items.Add(filepath);
-                    } else if (entry.Value == false) {
-                        notDetected.Items.Add(entry.Key);
-                    } else {
-                        //Error
-                    }
-                    
-                }
+                outputResults(results);
 
             } else if(searchType == "Number Range") {  //RANGE SEARCH
                 int lower = Int32.Parse(lowerBound.Text);
@@ -78,19 +84,7 @@ namespace File_Finder {
                     results = search.rangeSearch(lower, upper);
 
                 //Output found files to the form
-                foreach (KeyValuePair<string, bool> entry in results) {
-                    if (entry.Value == true) {
-                        string filepath = entry.Key;
-                        string filename = filepath.Split("\\").Last();
-                        foundFiles.Items.Add(filename);
-                        foundFilesPath.Items.Add(filepath);
-                    } else if (entry.Value == false) {
-                        notDetected.Items.Add(entry.Key);
-                    } else {
-                        //Error
-                    }
-
-                }
+                outputResults(results);
 
             } else {
                 //Select a seach type
@@ -100,8 +94,8 @@ namespace File_Finder {
         }
 
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
 
-        }
+
+
     }
 }
