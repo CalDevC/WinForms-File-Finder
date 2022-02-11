@@ -54,8 +54,10 @@ namespace File_Finder {
                 //Output found files to the form
                 foreach (KeyValuePair<string, bool> entry in results) {
                     if (entry.Value == true) {
-                        string filename = entry.Key.Split("\\").Last();
+                        string filepath = entry.Key;
+                        string filename = filepath.Split("\\").Last();
                         foundFiles.Items.Add(filename);
+                        foundFilesPath.Items.Add(filepath);
                     } else if (entry.Value == false) {
                         notDetected.Items.Add(entry.Key);
                     } else {
@@ -76,8 +78,10 @@ namespace File_Finder {
                 //Output found files to the form
                 foreach (KeyValuePair<string, bool> entry in results) {
                     if (entry.Value == true) {
-                        string filename = entry.Key.Split("\\").Last();
+                        string filepath = entry.Key;
+                        string filename = filepath.Split("\\").Last();
                         foundFiles.Items.Add(filename);
+                        foundFilesPath.Items.Add(filepath);
                     } else if (entry.Value == false) {
                         notDetected.Items.Add(entry.Key);
                     } else {
@@ -92,5 +96,9 @@ namespace File_Finder {
 
         }
 
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e) {
+
+        }
     }
 }
