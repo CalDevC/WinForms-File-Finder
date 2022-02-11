@@ -50,7 +50,6 @@ namespace File_Finder {
 
         //Search button clicked
         private void button1_Click(object sender, EventArgs e) {
-            button1.Cursor = Cursors.WaitCursor;
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
@@ -62,6 +61,15 @@ namespace File_Finder {
             foundFilesPath.Items.Clear();
             notDetected.Items.Clear();
             Dictionary<string, bool> results = new Dictionary<string, bool>();
+
+            //Check path validity
+            if (path == "" || !Directory.Exists(path)) {
+                pathTextBox.BackColor = Color.LightCoral;
+                return;
+            }
+
+            pathTextBox.BackColor = SystemColors.Window;
+            button1.Cursor = Cursors.WaitCursor;
 
             if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                 string searchTerm = phraseTextBox.Text;

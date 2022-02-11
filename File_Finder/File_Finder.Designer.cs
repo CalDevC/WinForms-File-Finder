@@ -63,6 +63,7 @@
             // 
             // pathTextBox
             // 
+            this.pathTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.pathTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.pathTextBox.Location = new System.Drawing.Point(189, 23);
             this.pathTextBox.Name = "pathTextBox";
