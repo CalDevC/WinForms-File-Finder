@@ -41,6 +41,7 @@ namespace File_Finder {
 
             //Clear results box and make new result List
             foundFiles.Items.Clear();
+            foundFilesPath.Items.Clear();
             notDetected.Items.Clear();
             Dictionary<string, bool> results = new Dictionary<string, bool>();
 
