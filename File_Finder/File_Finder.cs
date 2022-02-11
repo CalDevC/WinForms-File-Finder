@@ -32,6 +32,7 @@ namespace File_Finder {
 
         //Search button clicked
         private void button1_Click(object sender, EventArgs e) {
+            button1.Cursor = Cursors.WaitCursor;
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
@@ -94,6 +95,7 @@ namespace File_Finder {
                 //Select a seach type
             }
 
+            button1.Cursor = Cursors.Default;
         }
 
 
