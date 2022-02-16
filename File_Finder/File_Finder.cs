@@ -6,7 +6,7 @@ namespace File_Finder {
             InitializeComponent();
         }
 
-        //***** Output writer *****//
+        //***** DEBUG Functions *****//
         public void consoleLog(string msg) {
             System.Diagnostics.Debug.WriteLine(msg);
         }
@@ -24,6 +24,7 @@ namespace File_Finder {
             //searchTermType.SelectedIndex = 0;
             phraseTextBox.Text = "motor";
         }
+        //***** End of DEBUG Functions *****//
 
         private void Form1_Load(object sender, EventArgs e) {
             phraseTextBox.Hide();
@@ -35,9 +36,9 @@ namespace File_Finder {
             #if DEBUG
                 test2();
             #endif
-
         }
 
+        //Called when the dropdown value is changed
         private void searchTermType_Change(object sender, EventArgs e) {
             label4.Show();
             if (searchTermType.Text == "Keyword Phrase") {
@@ -76,6 +77,16 @@ namespace File_Finder {
         //update the status bar
         public void updateStatus(string text) {
             statusBar.Text = text;
+        }
+
+        //Launch an error pop-up
+        private void errorPopup(string exceptionMsg, string popupTitle, string? additionalMsg="") {
+            MessageBox.Show(
+                exceptionMsg + additionalMsg,
+                "Search Error",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
         }
 
         //Search button clicked
@@ -130,6 +141,7 @@ namespace File_Finder {
                     }
                 } catch(Exception e){
                     consoleLog(e.Message);
+                    errorPopup(e.Message, "Search Error", ", please select a valid search type from the dropdown");
                 }
 
                 statusBar.Text = "DONE";
