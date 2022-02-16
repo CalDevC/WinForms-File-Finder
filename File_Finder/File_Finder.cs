@@ -31,7 +31,7 @@ namespace File_Finder {
             label3.Hide();
             label4.Hide();
 
-            test.test2();
+            test.test3();
         }
 
         //Called when the dropdown value is changed

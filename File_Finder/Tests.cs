@@ -22,7 +22,7 @@ namespace File_Finder {
         }
 
         public void test3() {
-            ui.setUIValues("\\\\upifile1\\vidar", "", 0, "a", false);
+            ui.setUIValues("\\\\UPIFILE7\\electricaldwg$", ".pdf", 0, "test", true);
         }
     }
 }
