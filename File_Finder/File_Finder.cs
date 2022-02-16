@@ -115,6 +115,8 @@ namespace File_Finder {
             //Start a new thread to perfrom the search so taht UI can be updated
             var thread = new Thread(() => {
                 Thread.CurrentThread.IsBackground = true;
+
+                //Try to do a search and catch if there is an invalid search type
                 try {
                     if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                         string searchTerm = phraseTextBox.Text;
@@ -138,7 +140,8 @@ namespace File_Finder {
                     } else {
                         throw new Exception("Invalid search type");
                     }
-                } catch(Exception e){
+
+                } catch(Exception e){ //Catch if there is an invalid search type
                     consoleLog(e.Message);
                     errorPopup(e.Message, "Search Error", ", please select a valid search type from the dropdown");
                 }
@@ -147,8 +150,10 @@ namespace File_Finder {
             });
             thread.Start();
             thread.Join();
+
             //Output found files to the form
             outputResults(results);
+
             button1.Cursor = Cursors.Default;
         }
 
