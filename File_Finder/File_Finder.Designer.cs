@@ -34,7 +34,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.fileTypesTextBox = new System.Windows.Forms.TextBox();
             this.searchTermType = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.searchBtn = new System.Windows.Forms.Button();
             this.phraseTextBox = new System.Windows.Forms.TextBox();
             this.lowerBound = new System.Windows.Forms.TextBox();
             this.upperBound = new System.Windows.Forms.TextBox();
@@ -49,6 +49,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cancelBtn = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -115,15 +116,15 @@
             this.searchTermType.TabIndex = 5;
             this.searchTermType.SelectedIndexChanged += new System.EventHandler(this.searchTermType_Change);
             // 
-            // button1
+            // searchBtn
             // 
-            this.button1.Location = new System.Drawing.Point(206, 245);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Search";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.searchBtn.Location = new System.Drawing.Point(166, 244);
+            this.searchBtn.Name = "searchBtn";
+            this.searchBtn.Size = new System.Drawing.Size(75, 23);
+            this.searchBtn.TabIndex = 6;
+            this.searchBtn.Text = "Search";
+            this.searchBtn.UseVisualStyleBackColor = true;
+            this.searchBtn.Click += new System.EventHandler(this.searchBtn_Click);
             // 
             // phraseTextBox
             // 
@@ -263,11 +264,22 @@
             this.statusBar.Size = new System.Drawing.Size(39, 17);
             this.statusBar.Text = "Ready";
             // 
+            // cancelBtn
+            // 
+            this.cancelBtn.Location = new System.Drawing.Point(247, 244);
+            this.cancelBtn.Name = "cancelBtn";
+            this.cancelBtn.Size = new System.Drawing.Size(75, 23);
+            this.cancelBtn.TabIndex = 20;
+            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.UseVisualStyleBackColor = true;
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            // 
             // File_Finder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(458, 661);
+            this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
@@ -281,7 +293,7 @@
             this.Controls.Add(this.upperBound);
             this.Controls.Add(this.lowerBound);
             this.Controls.Add(this.phraseTextBox);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.searchBtn);
             this.Controls.Add(this.searchTermType);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.fileTypesTextBox);
@@ -308,7 +320,7 @@
         private Label label2;
         private TextBox fileTypesTextBox;
         private ComboBox searchTermType;
-        private Button button1;
+        private Button searchBtn;
         private TextBox phraseTextBox;
         private TextBox lowerBound;
         private TextBox upperBound;
@@ -323,5 +335,6 @@
         private Label label8;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusBar;
+        private Button cancelBtn;
     }
 }

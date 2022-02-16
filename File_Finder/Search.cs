@@ -35,6 +35,9 @@ namespace File_Finder {
                 foreach (string filepath in fileList) {
                     //Update UI status bar
                     ui.updateStatus(searchMsg + filepath);
+                    if (ui.getCancel()) {
+                        return results;
+                    }
 
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
@@ -61,6 +64,10 @@ namespace File_Finder {
 
             //For each found directory do a recursive phrase search
             foreach (var directory in Directory.GetDirectories(path)) {
+                if (ui.getCancel()) {
+                    return results;
+                }
+
                 Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
 
                 //Remove any non-detections that may have been added by a subdirectory
@@ -118,6 +125,10 @@ namespace File_Finder {
 
                     //For each number in the range
                     for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
+                        if (ui.getCancel()) {
+                            return results;
+                        }
+
                         if (filename.Contains(searchTerm.ToString())) {
                             if (!results.ContainsKey(filepath)) {
                                 results.Add(filepath, true);  //Append the found file
@@ -154,6 +165,10 @@ namespace File_Finder {
 
             //For each found directory do a recursive range search
             foreach (var directory in Directory.GetDirectories(path)) {
+                if (ui.getCancel()) {
+                    return results;
+                }
+
                 Dictionary<string, bool> subdirResults = rangeSearchRecur(lower, upper, directory);
 
                 //Remove any non-detections that may have been added by a subdirectory

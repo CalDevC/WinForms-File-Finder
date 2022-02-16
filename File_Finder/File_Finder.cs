@@ -3,6 +3,8 @@ namespace File_Finder {
     public partial class File_Finder : Form {
 
         Utils util = new Utils();
+        bool cancel = false;
+
         public File_Finder() {
             InitializeComponent();
         }
@@ -30,6 +32,7 @@ namespace File_Finder {
             upperBound.Hide();
             label3.Hide();
             label4.Hide();
+            cancelBtn.Enabled = false;
 
             test.test3();
         }
@@ -95,8 +98,16 @@ namespace File_Finder {
             );
         }
 
+        public bool getCancel() {
+            return cancel;
+        }
+
         //Search button clicked
-        private async void button1_Click(object sender, EventArgs e) {
+        private async void searchBtn_Click(object sender, EventArgs e) {
+            cancel = false;
+            cancelBtn.Enabled = true;
+            searchBtn.Enabled = false;
+
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
@@ -130,7 +141,7 @@ namespace File_Finder {
             }
 
             //Set wait cursor
-            button1.Cursor = Cursors.WaitCursor;
+            searchBtn.Cursor = Cursors.WaitCursor;
 
             //Try to do a search and catch if there is an invalid search type
             try {
@@ -170,17 +181,23 @@ namespace File_Finder {
                 errorPopup(err.Message, "Search Error");
             }
 
-            statusBar.Text = "DONE";
+            searchBtn.Cursor = Cursors.Default;
+
+            if (cancel) {
+                statusBar.Text = "CANCELLED";
+                return;
+            } else {
+                statusBar.Text = "DONE";
+            }
 
             //Output found files to the form
             outputResults(results);
-
-            button1.Cursor = Cursors.Default;
         }
 
-
-
-
-
+        private void cancelBtn_Click(object sender, EventArgs e) {
+            cancel = true;
+            cancelBtn.Enabled = false;
+            searchBtn.Enabled = true;
+        }
     }
 }
