@@ -6,10 +6,22 @@ namespace File_Finder {
             InitializeComponent();
         }
 
+        //***** Output writer *****//
+        public void consoleLog(string msg) {
+            System.Diagnostics.Debug.WriteLine(msg);
+        }
+
         public void test1() {
             pathTextBox.Text = "\\\\upifile1\\vidar";
             fileTypesTextBox.Text = ".pdf,.png,.tif,.jpg,.dwg";
             searchTermType.SelectedIndex = 0;
+            phraseTextBox.Text = "motor";
+        }
+
+        public void test2() {
+            pathTextBox.Text = "\\\\upifile1\\vidar";
+            fileTypesTextBox.Text = ".pdf,.png,.tif,.jpg,.dwg";
+            //searchTermType.SelectedIndex = 0;
             phraseTextBox.Text = "motor";
         }
 
@@ -21,7 +33,7 @@ namespace File_Finder {
             label4.Hide();
 
             #if DEBUG
-                test1();
+                test2();
             #endif
 
         }
@@ -93,27 +105,31 @@ namespace File_Finder {
             //Start a new thread to perfrom the search so taht UI can be updated
             var thread = new Thread(() => {
                 Thread.CurrentThread.IsBackground = true;
-                if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
-                    string searchTerm = phraseTextBox.Text;
+                try {
+                    if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
+                        string searchTerm = phraseTextBox.Text;
 
-                    if (recursive) {
-                        results = search.phraseSearchRecur(searchTerm, path);
+                        if (recursive) {
+                            results = search.phraseSearchRecur(searchTerm, path);
+                        } else {
+                            results = search.phraseSearch(searchTerm);
+                        }
+
+                    } else if (searchType == "Number Range") {  //RANGE SEARCH
+                        int lower = Int32.Parse(lowerBound.Text);
+                        int upper = Int32.Parse(upperBound.Text);
+
+                        if (recursive) {
+                            results = search.rangeSearchRecur(lower, upper, path);
+                        } else {
+                            results = search.rangeSearch(lower, upper);
+                        }
+
                     } else {
-                        results = search.phraseSearch(searchTerm);
+                        throw new Exception("Invalid search type");
                     }
-
-                } else if (searchType == "Number Range") {  //RANGE SEARCH
-                    int lower = Int32.Parse(lowerBound.Text);
-                    int upper = Int32.Parse(upperBound.Text);
-
-                    if (recursive) {
-                        results = search.rangeSearchRecur(lower, upper, path);
-                    } else {
-                        results = search.rangeSearch(lower, upper);
-                    }
-
-                } else {
-                    //Select a seach type
+                } catch(Exception e){
+                    consoleLog(e.Message);
                 }
 
                 statusBar.Text = "DONE";

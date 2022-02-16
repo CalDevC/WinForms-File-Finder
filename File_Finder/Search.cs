@@ -21,11 +21,6 @@ namespace File_Finder {
             this.ui = sender;
         }
 
-        //***** Output writer *****//
-        private void consoleLog(string msg) {
-            System.Diagnostics.Debug.WriteLine(msg);
-        }
-
         //***** Non-recursive phrase search *****//
         public Dictionary<string, bool> phraseSearch(string searchTerm) {
             Dictionary<string, bool> results = new Dictionary<string, bool> ();
