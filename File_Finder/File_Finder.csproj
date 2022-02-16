@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>ussupiLogo2.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="ussupiLogo2.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Cake.Powershell" Version="1.0.1" />

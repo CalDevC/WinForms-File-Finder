@@ -33,7 +33,7 @@ namespace File_Finder {
             label4.Hide();
 
             #if DEBUG
-                test.test2();
+                test.test3();
             #endif
         }
 
@@ -82,9 +82,19 @@ namespace File_Finder {
         private void errorPopup(string exceptionMsg, string popupTitle, string? additionalMsg="") {
             MessageBox.Show(
                 exceptionMsg + additionalMsg,
-                "Search Error",
+                popupTitle,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
+            );
+        }
+
+        //Launch info pop-up
+        private DialogResult infoPopup(string msg, string popupTitle) {
+            return MessageBox.Show(
+                msg,
+                popupTitle,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Exclamation
             );
         }
 
@@ -94,6 +104,20 @@ namespace File_Finder {
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
+
+            //Ask to confirm search for all file types
+            if (fileTypes == "") {
+                DialogResult selection = infoPopup(
+                    "The current search criteria specify no file types. " +
+                    "This will cause the File Finder to return all matching " +
+                    "search results regardless of file type.",
+                    "Search Warning");
+
+                if(selection == DialogResult.Cancel) {
+                    return;
+                }
+            }
+
             Search search = new Search(this, path, fileTypes);
 
             //Clear results box and make new result List
@@ -120,6 +144,10 @@ namespace File_Finder {
                     if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                         string searchTerm = phraseTextBox.Text;
 
+                        if (searchTerm == "") {
+                            throw new Exception("No search term was entered, aborting search");
+                        }
+
                         if (recursive) {
                             results = search.phraseSearchRecur(searchTerm, path);
                         } else {
@@ -137,12 +165,13 @@ namespace File_Finder {
                         }
 
                     } else {
-                        throw new Exception("Invalid search type");
+                        throw new Exception("Invalid search type, please select a valid search type from the dropdown");
                     }
 
                 } catch(Exception e){ //Catch if there is an invalid search type
                     util.consoleLog(e.Message);
-                    errorPopup(e.Message, "Search Error", ", please select a valid search type from the dropdown");
+                    errorPopup(e.Message, "Search Error");
+                    return;
                 }
 
                 statusBar.Text = "DONE";

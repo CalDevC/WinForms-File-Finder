@@ -260,8 +260,8 @@
             // statusBar
             // 
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(118, 17);
-            this.statusBar.Text = "toolStripStatusLabel1";
+            this.statusBar.Size = new System.Drawing.Size(39, 17);
+            this.statusBar.Text = "Ready";
             // 
             // File_Finder
             // 
@@ -289,7 +289,7 @@
             this.Controls.Add(this.pathTextBox);
             this.Controls.Add(this.recurCheckBox);
             this.Name = "File_Finder";
-            this.Text = "Form1";
+            this.Text = "USS-UPI File Finder";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

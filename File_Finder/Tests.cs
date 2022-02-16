@@ -20,5 +20,9 @@ namespace File_Finder {
         public void test2() {
             ui.setUIValues("\\\\upifile1\\vidar", ".pdf,.png,.tif,.jpg,.dwg", -1, "motor", false);
         }
+
+        public void test3() {
+            ui.setUIValues("\\\\upifile1\\vidar", "", 0, "a", false);
+        }
     }
 }
