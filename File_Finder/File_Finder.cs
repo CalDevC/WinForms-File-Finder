@@ -105,10 +105,9 @@ namespace File_Finder {
 
             //Check path validity
             if (path == "" || !Directory.Exists(path)) {
-                pathTextBox.BackColor = Color.LightCoral;
+                errorPopup("Invalid search path", "Search Error", ", please enter a valid directory to search. Begin path with: \\\\");
                 return;
             }
-            pathTextBox.BackColor = SystemColors.Window;
 
             //Set wait cursor
             button1.Cursor = Cursors.WaitCursor;
