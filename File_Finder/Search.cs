@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 namespace File_Finder {
     internal class Search {
 
+        //Message strings
+        private string searchMsg = "Searching ";
+
         private string[] fileTypes;
         private string path;
         private File_Finder ui;
@@ -36,6 +39,9 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    //Update UI status bar
+                    ui.updateStatus(searchMsg + filepath);
+
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
@@ -49,6 +55,7 @@ namespace File_Finder {
                 results.Add (searchTerm, false);
             }
 
+            
             return results;      
         }
 
@@ -60,7 +67,6 @@ namespace File_Finder {
 
             //For each found directory do a recursive phrase search
             foreach (var directory in Directory.GetDirectories(path)) {
-                ui.updateStatus("Searching " + directory);
                 Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
 
                 //Remove any non-detections that may have been added by a subdirectory
@@ -80,8 +86,10 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    //Update UI status bar
+                    ui.updateStatus(searchMsg + filepath);
+
                     string filename = filepath.Split("\\").Last();
-                    
                     if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
                         System.Diagnostics.Debug.WriteLine("Added " + filepath);
@@ -93,7 +101,7 @@ namespace File_Finder {
                 results.Add(searchTerm, false);
             }
 
-            ui.updateStatus("Done");
+            
             return results;
         }
 
@@ -109,6 +117,9 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    //Update UI status bar
+                    ui.updateStatus(searchMsg + filepath);
+
                     string filename = filepath.Split("\\").Last();
 
                     //For each number in the range
@@ -138,6 +149,7 @@ namespace File_Finder {
                 }
             }
 
+            
             return results;
         }
 
@@ -167,6 +179,9 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    //Update UI status bar
+                    ui.updateStatus(searchMsg + filepath);
+
                     string filename = filepath.Split("\\").Last();
 
                     //For each number in the range
@@ -196,7 +211,7 @@ namespace File_Finder {
                 }
             }
 
-
+            
             return results;
         }
 

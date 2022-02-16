@@ -6,12 +6,20 @@ namespace File_Finder {
             InitializeComponent();
         }
 
+        public void test1() {
+            pathTextBox.Text = "\\\\upifile1\\vidar";
+            fileTypesTextBox.Text = ".pdf,.png,.tif,.jpg,.dwg";
+            searchTermType.SelectedIndex = 0;
+            phraseTextBox.Text = "motor";
+        }
+
         private void Form1_Load(object sender, EventArgs e) {
             phraseTextBox.Hide();
             lowerBound.Hide();
             upperBound.Hide();
             label3.Hide();
             label4.Hide();
+            test1();
         }
 
         private void searchTermType_Change(object sender, EventArgs e) {
@@ -50,7 +58,7 @@ namespace File_Finder {
         }
 
         //update the status bar
-        public void updateStatus(string text) { 
+        public void updateStatus(string text) {
             statusBar.Text = text;
         }
 
@@ -73,47 +81,43 @@ namespace File_Finder {
                 pathTextBox.BackColor = Color.LightCoral;
                 return;
             }
-
             pathTextBox.BackColor = SystemColors.Window;
+
+            //Set wait cursor
             button1.Cursor = Cursors.WaitCursor;
 
-            if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
-                string searchTerm = phraseTextBox.Text;
+            //Start a new thread to perfrom the search so taht UI can be updated
+            var thread = new Thread(() => {
+                Thread.CurrentThread.IsBackground = true;
+                if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
+                    string searchTerm = phraseTextBox.Text;
 
-                if (recursive) {
-                    var thread = new Thread(() =>
-                    {
-                        Thread.CurrentThread.IsBackground = true;
+                    if (recursive) {
                         results = search.phraseSearchRecur(searchTerm, path);
-                        Console.WriteLine("DONE");
-                    });
-                    thread.Start();
-                    thread.Join();
+                    } else {
+                        results = search.phraseSearch(searchTerm);
+                    }
 
-                    //results = search.phraseSearchRecur(searchTerm, path);
+                } else if (searchType == "Number Range") {  //RANGE SEARCH
+                    int lower = Int32.Parse(lowerBound.Text);
+                    int upper = Int32.Parse(upperBound.Text);
+
+                    if (recursive) {
+                        results = search.rangeSearchRecur(lower, upper, path);
+                    } else {
+                        results = search.rangeSearch(lower, upper);
+                    }
+
                 } else {
-                    results = search.phraseSearch(searchTerm);
+                    //Select a seach type
                 }
 
-                //Output found files to the form
-                outputResults(results);
-
-            } else if(searchType == "Number Range") {  //RANGE SEARCH
-                int lower = Int32.Parse(lowerBound.Text);
-                int upper = Int32.Parse(upperBound.Text);
-
-                if (recursive)
-                    results = search.rangeSearchRecur(lower, upper, path);
-                else
-                    results = search.rangeSearch(lower, upper);
-
-                //Output found files to the form
-                outputResults(results);
-
-            } else {
-                //Select a seach type
-            }
-
+                statusBar.Text = "DONE";
+            });
+            thread.Start();
+            thread.Join();
+            //Output found files to the form
+            outputResults(results);
             button1.Cursor = Cursors.Default;
         }
 
