@@ -1,3 +1,4 @@
+using System.Threading;
 
 namespace File_Finder {
     public partial class File_Finder : Form {
@@ -48,13 +49,18 @@ namespace File_Finder {
             }
         }
 
+        //update the status bar
+        public void updateStatus(string text) { 
+            statusBar.Text = text;
+        }
+
         //Search button clicked
         private void button1_Click(object sender, EventArgs e) {
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
-            Search search = new Search(path, fileTypes);
+            Search search = new Search(this, path, fileTypes);
 
             //Clear results box and make new result List
             foundFiles.Items.Clear();
@@ -74,10 +80,20 @@ namespace File_Finder {
             if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                 string searchTerm = phraseTextBox.Text;
 
-                if (recursive)
-                    results = search.phraseSearchRecur(searchTerm, path);
-                else
+                if (recursive) {
+                    var thread = new Thread(() =>
+                    {
+                        Thread.CurrentThread.IsBackground = true;
+                        results = search.phraseSearchRecur(searchTerm, path);
+                        Console.WriteLine("DONE");
+                    });
+                    thread.Start();
+                    thread.Join();
+
+                    //results = search.phraseSearchRecur(searchTerm, path);
+                } else {
                     results = search.phraseSearch(searchTerm);
+                }
 
                 //Output found files to the form
                 outputResults(results);

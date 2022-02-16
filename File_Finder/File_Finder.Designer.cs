@@ -47,6 +47,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.foundFilesPath = new System.Windows.Forms.ListBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // recurCheckBox
@@ -244,11 +247,28 @@
             this.label8.TabIndex = 18;
             this.label8.Text = "(full path)";
             // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusBar});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 639);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(458, 22);
+            this.statusStrip1.TabIndex = 19;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // statusBar
+            // 
+            this.statusBar.Name = "statusBar";
+            this.statusBar.Size = new System.Drawing.Size(118, 17);
+            this.statusBar.Text = "toolStripStatusLabel1";
+            // 
             // File_Finder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(458, 661);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.foundFilesPath);
@@ -271,6 +291,8 @@
             this.Name = "File_Finder";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -299,5 +321,7 @@
         private Label label7;
         private ListBox foundFilesPath;
         private Label label8;
+        private StatusStrip statusStrip1;
+        private ToolStripStatusLabel statusBar;
     }
 }
