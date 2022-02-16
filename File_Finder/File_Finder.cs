@@ -132,50 +132,45 @@ namespace File_Finder {
             //Set wait cursor
             button1.Cursor = Cursors.WaitCursor;
 
-            //Start a new thread to perfrom the search so that UI can be updated
-            var myTask = Task.Run(() => {
-                //Thread.CurrentThread.IsBackground = true;
+            //Try to do a search and catch if there is an invalid search type
+            try {
+                if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
+                    string searchTerm = phraseTextBox.Text;
 
-                //Try to do a search and catch if there is an invalid search type
-                try {
-                    if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
-                        string searchTerm = phraseTextBox.Text;
-
-                        if (searchTerm == "") {
-                            throw new Exception("No search term was entered, aborting search");
-                        }
-
-                        if (recursive) {
-                            results = search.phraseSearchRecur(searchTerm, path);
-                        } else {
-                            results = search.phraseSearch(searchTerm);
-                        }
-
-                    } else if (searchType == "Number Range") {  //RANGE SEARCH
-                        int lower = Int32.Parse(lowerBound.Text);
-                        int upper = Int32.Parse(upperBound.Text);
-
-                        if (recursive) {
-                            results = search.rangeSearchRecur(lower, upper, path);
-                        } else {
-                            results = search.rangeSearch(lower, upper);
-                        }
-
-                    } else {
-                        throw new Exception("Invalid search type, please select a valid search type from the dropdown");
+                    if (searchTerm == "") {
+                        throw new Exception("No search term was entered, aborting search");
                     }
 
-                } catch(Exception e){ //Catch if there is an invalid search type
-                    util.consoleLog(e.Message);
-                    errorPopup(e.Message, "Search Error");
+                    if (recursive) {
+                        var recurPhraseTask = Task.Run(() => { return search.phraseSearchRecur(searchTerm, path); });
+                        results = await recurPhraseTask;
+                    } else {
+                        var nonrecurPhraseTask = Task.Run(() => { return search.phraseSearch(searchTerm); });
+                        results = await nonrecurPhraseTask;
+                    }
+
+                } else if (searchType == "Number Range") {  //RANGE SEARCH
+                    int lower = Int32.Parse(lowerBound.Text);
+                    int upper = Int32.Parse(upperBound.Text);
+
+                    if (recursive) {
+                        var recurRangeTask = Task.Run(() => { return search.rangeSearchRecur(lower, upper, path); });
+                        results = await recurRangeTask;
+                    } else {
+                        var nonrecurRangeTask = Task.Run(() => {return search.rangeSearch(lower, upper); });
+                        results = await nonrecurRangeTask;
+                    }
+
+                } else {
+                    throw new Exception("Invalid search type, please select a valid search type from the dropdown");
                 }
 
-                statusBar.Text = "DONE";
-                return results;
-            });
-            
-            results = await myTask;
-            
+            } catch(Exception err){ //Catch if there is an invalid search type
+                util.consoleLog(err.Message);
+                errorPopup(err.Message, "Search Error");
+            }
+
+            statusBar.Text = "DONE";
 
             //Output found files to the form
             outputResults(results);
