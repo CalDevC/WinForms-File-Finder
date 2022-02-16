@@ -1,4 +1,3 @@
-using System.Threading;
 
 namespace File_Finder {
     public partial class File_Finder : Form {
@@ -32,20 +31,20 @@ namespace File_Finder {
             label3.Hide();
             label4.Hide();
 
-            //test.test2();
+            test.test2();
         }
 
         //Called when the dropdown value is changed
         private void searchTermType_Change(object sender, EventArgs e) {
             label4.Show();
             if (searchTermType.Text == "Keyword Phrase") {
-                //Show phrase textbox and hide numbe range boxes
+                //Show phrase textbox and hide number range boxes
                 phraseTextBox.Show();
                 lowerBound.Hide();
                 upperBound.Hide();
                 label3.Hide();
             } else if (searchTermType.Text == "Number Range") {
-                //Hide phrase textbox and show numbe range boxes
+                //Hide phrase textbox and show number range boxes
                 phraseTextBox.Hide();
                 lowerBound.Show();
                 upperBound.Show();
@@ -97,7 +96,7 @@ namespace File_Finder {
         }
 
         //Search button clicked
-        private void button1_Click(object sender, EventArgs e) {
+        private async void button1_Click(object sender, EventArgs e) {
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
@@ -133,9 +132,9 @@ namespace File_Finder {
             //Set wait cursor
             button1.Cursor = Cursors.WaitCursor;
 
-            //Start a new thread to perfrom the search so taht UI can be updated
-            var thread = new Thread(() => {
-                Thread.CurrentThread.IsBackground = true;
+            //Start a new thread to perfrom the search so that UI can be updated
+            var myTask = Task.Run(() => {
+                //Thread.CurrentThread.IsBackground = true;
 
                 //Try to do a search and catch if there is an invalid search type
                 try {
@@ -169,13 +168,14 @@ namespace File_Finder {
                 } catch(Exception e){ //Catch if there is an invalid search type
                     util.consoleLog(e.Message);
                     errorPopup(e.Message, "Search Error");
-                    return;
                 }
 
                 statusBar.Text = "DONE";
+                return results;
             });
-            thread.Start();
-            thread.Join();
+            
+            results = await myTask;
+            
 
             //Output found files to the form
             outputResults(results);
