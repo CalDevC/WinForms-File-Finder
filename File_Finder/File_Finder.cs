@@ -192,6 +192,10 @@ namespace File_Finder {
 
             //Output found files to the form
             outputResults(results);
+
+            //Enable proper buttons
+            cancelBtn.Enabled = false;
+            searchBtn.Enabled = true;
         }
 
         private void cancelBtn_Click(object sender, EventArgs e) {
