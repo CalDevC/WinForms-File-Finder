@@ -22,5 +22,9 @@ namespace File_Finder {
 
             return sum;
         }
+
+        public void consoleLog(string msg) {
+            System.Diagnostics.Debug.WriteLine(msg);
+        }
     }
 }

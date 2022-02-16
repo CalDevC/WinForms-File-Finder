@@ -2,31 +2,30 @@ using System.Threading;
 
 namespace File_Finder {
     public partial class File_Finder : Form {
+
+        Utils util = new Utils();
         public File_Finder() {
             InitializeComponent();
         }
 
-        //***** DEBUG Functions *****//
-        public void consoleLog(string msg) {
-            System.Diagnostics.Debug.WriteLine(msg);
+        public void setUIValues(string path, string fileTypes, int searchTypeIdx, string searchTerm, bool recursive) {
+            pathTextBox.Text = path;
+            fileTypesTextBox.Text = fileTypes;
+            searchTermType.SelectedIndex = searchTypeIdx;
+            if(searchTypeIdx == 0) {
+                phraseTextBox.Text = searchTerm;
+            } else if(searchTypeIdx == 1){
+                string[] searchTermParts = searchTerm.Split('-');
+                lowerBound.Text = searchTermParts[0];
+                upperBound.Text = searchTermParts[1];
+            }
+            
+            recurCheckBox.Checked = recursive;
         }
-
-        public void test1() {
-            pathTextBox.Text = "\\\\upifile1\\vidar";
-            fileTypesTextBox.Text = ".pdf,.png,.tif,.jpg,.dwg";
-            searchTermType.SelectedIndex = 0;
-            phraseTextBox.Text = "motor";
-        }
-
-        public void test2() {
-            pathTextBox.Text = "\\\\upifile1\\vidar";
-            fileTypesTextBox.Text = ".pdf,.png,.tif,.jpg,.dwg";
-            //searchTermType.SelectedIndex = 0;
-            phraseTextBox.Text = "motor";
-        }
-        //***** End of DEBUG Functions *****//
 
         private void Form1_Load(object sender, EventArgs e) {
+            Tests test = new Tests(this);
+
             phraseTextBox.Hide();
             lowerBound.Hide();
             upperBound.Hide();
@@ -34,7 +33,7 @@ namespace File_Finder {
             label4.Hide();
 
             #if DEBUG
-                test2();
+                test.test2();
             #endif
         }
 
@@ -142,7 +141,7 @@ namespace File_Finder {
                     }
 
                 } catch(Exception e){ //Catch if there is an invalid search type
-                    consoleLog(e.Message);
+                    util.consoleLog(e.Message);
                     errorPopup(e.Message, "Search Error", ", please select a valid search type from the dropdown");
                 }
 
