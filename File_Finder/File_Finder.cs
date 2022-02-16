@@ -19,7 +19,11 @@ namespace File_Finder {
             upperBound.Hide();
             label3.Hide();
             label4.Hide();
-            test1();
+
+            #if DEBUG
+                test1();
+            #endif
+
         }
 
         private void searchTermType_Change(object sender, EventArgs e) {
