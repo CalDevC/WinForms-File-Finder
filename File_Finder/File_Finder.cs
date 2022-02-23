@@ -5,25 +5,12 @@ namespace File_Finder {
         Utils util = new Utils();
         bool cancel = false;
 
+        //Constructor
         public File_Finder() {
             InitializeComponent();
         }
 
-        public void setUIValues(string path, string fileTypes, int searchTypeIdx, string searchTerm, bool recursive) {
-            pathTextBox.Text = path;
-            fileTypesTextBox.Text = fileTypes;
-            searchTermType.SelectedIndex = searchTypeIdx;
-            if(searchTypeIdx == 0) {
-                phraseTextBox.Text = searchTerm;
-            } else if(searchTypeIdx == 1){
-                string[] searchTermParts = searchTerm.Split('-');
-                lowerBound.Text = searchTermParts[0];
-                upperBound.Text = searchTermParts[1];
-            }
-            
-            recurCheckBox.Checked = recursive;
-        }
-
+        //On form load
         private void Form1_Load(object sender, EventArgs e) {
             Tests test = new Tests(this);
 
@@ -37,7 +24,26 @@ namespace File_Finder {
             test.test3();
         }
 
-        //Called when the dropdown value is changed
+        //Allows unit tests to fill out the form
+        public void setUIValues(string path, string fileTypes, int searchTypeIdx, string searchTerm, bool recursive) {
+            pathTextBox.Text = path;
+            fileTypesTextBox.Text = fileTypes;
+            searchTermType.SelectedIndex = searchTypeIdx;
+
+            if(searchTypeIdx == 0) {
+                phraseTextBox.Text = searchTerm;
+            } else if(searchTypeIdx == 1){
+                string[] searchTermParts = searchTerm.Split('-');
+                lowerBound.Text = searchTermParts[0];
+                upperBound.Text = searchTermParts[1];
+            }
+            
+            recurCheckBox.Checked = recursive;
+        }
+
+        
+
+        //On dropdown value change
         private void searchTermType_Change(object sender, EventArgs e) {
             label4.Show();
             if (searchTermType.Text == "Keyword Phrase") {
@@ -57,7 +63,6 @@ namespace File_Finder {
 
         //Output results to the GUI
         private void outputResults(Dictionary<string, bool> results) {
-            //Output found files to the form
             foreach (KeyValuePair<string, bool> entry in results) {
                 if (entry.Value == true) {
                     string filepath = entry.Key;
@@ -67,28 +72,28 @@ namespace File_Finder {
                 } else if (entry.Value == false) {
                     notDetected.Items.Add(entry.Key);
                 } else {
-                    //Error
+                    errorPopup("Result dictionary error: key value was neither true nor false.", "Error");
                 }
 
             }
         }
 
-        //update the status bar
+        //Update the status bar
         public void updateStatus(string text) {
             statusBar.Text = text;
         }
 
         //Launch an error pop-up
-        private void errorPopup(string exceptionMsg, string popupTitle, string? additionalMsg="") {
+        private void errorPopup(string exceptionMsg, string popupTitle) {
             MessageBox.Show(
-                exceptionMsg + additionalMsg,
+                exceptionMsg,
                 popupTitle,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error
             );
         }
 
-        //Launch info pop-up
+        //Launch an info pop-up
         private DialogResult infoPopup(string msg, string popupTitle) {
             return MessageBox.Show(
                 msg,
@@ -98,20 +103,31 @@ namespace File_Finder {
             );
         }
         
+        //Get the value of the cancel flag
         public bool getCancel() {
             return cancel;
         }
 
-        //Search button clicked
-        private async void searchBtn_Click(object sender, EventArgs e) {
-            cancel = false;
-            cancelBtn.Enabled = true;
-            searchBtn.Enabled = false;
+        //On cancel button clicked
+        private void cancelBtn_Click(object sender, EventArgs e) {
+            cancel = true;
+            cancelBtn.Enabled = false;
+            searchBtn.Enabled = true;
+        }
 
+        //On Search button clicked
+        private async void searchBtn_Click(object sender, EventArgs e) {
+            //Initialize variables with user input
             string path = pathTextBox.Text;
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
+
+            //Check path validity
+            if (path == "" || !Directory.Exists(path)) {
+                errorPopup("Invalid search path, please enter a valid directory to search. Begin path with: \\\\", "Search Error");
+                return;
+            }
 
             //Ask to confirm search for all file types
             if (fileTypes == "") {
@@ -119,73 +135,63 @@ namespace File_Finder {
                     "The current search criteria specify no file types. " +
                     "This will cause the File Finder to return all matching " +
                     "search results regardless of file type.",
-                    "Search Warning");
+                    "Search Warning"
+                );
 
                 if(selection == DialogResult.Cancel) {
                     return;
                 }
             }
 
-            Search search = new Search(this, path, fileTypes);
-
-            //Clear results box and make new result List
+            //Update UI elements
+            cancel = false;
+            cancelBtn.Enabled = true;
+            searchBtn.Enabled = false;
             foundFiles.Items.Clear();
             foundFilesPath.Items.Clear();
             notDetected.Items.Clear();
+
+            Search search = new Search(this, path, fileTypes);
             Dictionary<string, bool> results = new Dictionary<string, bool>();
 
-            //Check path validity
-            if (path == "" || !Directory.Exists(path)) {
-                errorPopup("Invalid search path", "Search Error", ", please enter a valid directory to search. Begin path with: \\\\");
-                return;
-            }
-
-            //Set wait cursor
-            searchBtn.Cursor = Cursors.WaitCursor;
-
-            //Try to do a search and catch if there is an invalid search type
+            //Try to do a search and catch any additioanl user input issues
             try {
                 if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                     string searchTerm = phraseTextBox.Text;
 
                     if (searchTerm == "") {
-                        throw new Exception("No search term was entered, aborting search");
+                        throw new Exception("No search term was entered, aborting search.");
                     }
 
-                    if (recursive) {
-                        results = await Task.Run(() => { return search.phraseSearchRecur(searchTerm, path); });
-
-                    } else {
-                        results = await Task.Run(() => { return search.phraseSearch(searchTerm); });
-                    }
+                    //Run either recursive or nonrecursive phrase search
+                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); } );
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
                     int lower = Int32.Parse(lowerBound.Text);
                     int upper = Int32.Parse(upperBound.Text);
 
-                    if (recursive) {
-                        results = await Task.Run(() => { return search.rangeSearchRecur(lower, upper, path); });
-                    } else {
-                        results = await Task.Run(() => { return search.rangeSearch(lower, upper); });
+                    if (lower > upper) {
+                        throw new Exception("Invalid range: lower bound must be less than or equal to upper value.");
                     }
 
+                    //Run either recursive or nonrecursive range search
+                    results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+
                 } else {
-                    throw new Exception("Invalid search type, please select a valid search type from the dropdown");
+                    throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
                 }
 
             } catch(Exception err){ //Catch if there is an invalid search type
                 util.consoleLog(err.Message);
-                errorPopup(err.Message, "Search Error");
+                errorPopup(err.Message + " Aborting search.", "Search Error");
             }
-
-            searchBtn.Cursor = Cursors.Default;
 
             if (cancel) {
                 statusBar.Text = "CANCELLED";
                 return;
-            } else {
-                statusBar.Text = "DONE";
             }
+
+            statusBar.Text = "DONE";
 
             //Output found files to the form
             outputResults(results);
@@ -195,10 +201,6 @@ namespace File_Finder {
             searchBtn.Enabled = true;
         }
 
-        private void cancelBtn_Click(object sender, EventArgs e) {
-            cancel = true;
-            cancelBtn.Enabled = false;
-            searchBtn.Enabled = true;
-        }
+
     }
 }

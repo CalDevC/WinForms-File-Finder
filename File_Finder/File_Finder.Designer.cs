@@ -313,6 +313,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.pathTextBox);
             this.Controls.Add(this.recurCheckBox);
+            this.MinimumSize = new System.Drawing.Size(474, 700);
             this.Name = "File_Finder";
             this.Text = "USS-UPI File Finder";
             this.Load += new System.EventHandler(this.Form1_Load);
