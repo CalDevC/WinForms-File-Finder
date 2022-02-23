@@ -67,6 +67,8 @@
             // 
             // pathTextBox
             // 
+            this.pathTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pathTextBox.BackColor = System.Drawing.SystemColors.Window;
             this.pathTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.pathTextBox.Location = new System.Drawing.Point(100, 23);
@@ -96,6 +98,8 @@
             // 
             // fileTypesTextBox
             // 
+            this.fileTypesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fileTypesTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.fileTypesTextBox.Location = new System.Drawing.Point(100, 62);
             this.fileTypesTextBox.Name = "fileTypesTextBox";
@@ -104,6 +108,8 @@
             // 
             // searchTermType
             // 
+            this.searchTermType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.searchTermType.Cursor = System.Windows.Forms.Cursors.Hand;
             this.searchTermType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.searchTermType.FormattingEnabled = true;
@@ -118,6 +124,7 @@
             // 
             // searchBtn
             // 
+            this.searchBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.searchBtn.Location = new System.Drawing.Point(166, 244);
             this.searchBtn.Name = "searchBtn";
             this.searchBtn.Size = new System.Drawing.Size(75, 23);
@@ -128,6 +135,8 @@
             // 
             // phraseTextBox
             // 
+            this.phraseTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.phraseTextBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.phraseTextBox.Location = new System.Drawing.Point(100, 167);
             this.phraseTextBox.Name = "phraseTextBox";
@@ -268,6 +277,7 @@
             // 
             // cancelBtn
             // 
+            this.cancelBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.cancelBtn.Location = new System.Drawing.Point(247, 244);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
@@ -280,6 +290,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(458, 661);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.statusStrip1);
