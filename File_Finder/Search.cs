@@ -12,17 +12,19 @@ namespace File_Finder {
         private string[] fileTypes;
         private string path;
         private File_Finder ui;
+        private Utils util;
 
         //***** Constructor *****//
         public Search(File_Finder sender, string path, string fileTypes) {
             this.path = path;
             this.fileTypes = fileTypes.Split(',');
             this.ui = sender;
+            this.util = new Utils();
         }
 
         //***** Non-recursive phrase search *****//
         public Dictionary<string, bool> phraseSearch(string searchTerm) {
-            Dictionary<string, bool> results = new Dictionary<string, bool> ();
+            Dictionary<string, bool> results = new Dictionary<string, bool>();
             searchTerm = searchTerm.ToLower();
 
             //For each file type
@@ -33,8 +35,6 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
-                    //Update UI status bar
-                    ui.updateStatus(searchMsg + filepath);
                     if (ui.getCancel()) {
                         return results;
                     }
@@ -42,18 +42,17 @@ namespace File_Finder {
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
-                        System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
-                    
+
                 }
             }
 
-            if(results.Count == 0) {
-                results.Add (searchTerm, false);
+            if (results.Count == 0) {
+                results.Add(searchTerm, false);
             }
 
-            
-            return results;      
+
+            return results;
         }
 
 
@@ -79,6 +78,9 @@ namespace File_Finder {
                 subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
             }
 
+
+
+
             //For each file type
             foreach (var type in fileTypes) {
 
@@ -88,12 +90,11 @@ namespace File_Finder {
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
                     //Update UI status bar
-                    ui.updateStatus(searchMsg + filepath);
+                    
 
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
-                        System.Diagnostics.Debug.WriteLine("Added " + filepath);
                     }
                 }
             }
@@ -102,10 +103,8 @@ namespace File_Finder {
                 results.Add(searchTerm, false);
             }
 
-            
             return results;
         }
-
 
         //***** Non-recursive range search *****//
         public Dictionary<string, bool> rangeSearch(int lower, int upper) {
@@ -118,9 +117,6 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
-                    //Update UI status bar
-                    ui.updateStatus(searchMsg + filepath);
-
                     string filename = filepath.Split("\\").Last();
 
                     //For each number in the range
@@ -132,7 +128,6 @@ namespace File_Finder {
                         if (filename.Contains(searchTerm.ToString())) {
                             if (!results.ContainsKey(filepath)) {
                                 results.Add(filepath, true);  //Append the found file
-                                System.Diagnostics.Debug.WriteLine("Added " + filepath);
                             }
                         }
                     }
@@ -154,7 +149,7 @@ namespace File_Finder {
                 }
             }
 
-            
+
             return results;
         }
 
@@ -188,9 +183,6 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
-                    //Update UI status bar
-                    ui.updateStatus(searchMsg + filepath);
-
                     string filename = filepath.Split("\\").Last();
 
                     //For each number in the range
@@ -198,7 +190,6 @@ namespace File_Finder {
                         if (filename.Contains(searchTerm.ToString())) {
                             if (!results.ContainsKey(filepath)) {
                                 results.Add(filepath, true);  //Append the found file
-                                System.Diagnostics.Debug.WriteLine("Added " + filepath);
                             }
                         }
                     }
@@ -220,7 +211,7 @@ namespace File_Finder {
                 }
             }
 
-            
+
             return results;
         }
 

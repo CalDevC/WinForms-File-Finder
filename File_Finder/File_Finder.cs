@@ -153,11 +153,10 @@ namespace File_Finder {
                     }
 
                     if (recursive) {
-                        var recurPhraseTask = Task.Run(() => { return search.phraseSearchRecur(searchTerm, path); });
-                        results = await recurPhraseTask;
+                        results = await Task.Run(() => { return search.phraseSearchRecur(searchTerm, path); });
+
                     } else {
-                        var nonrecurPhraseTask = Task.Run(() => { return search.phraseSearch(searchTerm); });
-                        results = await nonrecurPhraseTask;
+                        results = await Task.Run(() => { return search.phraseSearch(searchTerm); });
                     }
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
@@ -165,11 +164,9 @@ namespace File_Finder {
                     int upper = Int32.Parse(upperBound.Text);
 
                     if (recursive) {
-                        var recurRangeTask = Task.Run(() => { return search.rangeSearchRecur(lower, upper, path); });
-                        results = await recurRangeTask;
+                        results = await Task.Run(() => { return search.rangeSearchRecur(lower, upper, path); });
                     } else {
-                        var nonrecurRangeTask = Task.Run(() => {return search.rangeSearch(lower, upper); });
-                        results = await nonrecurRangeTask;
+                        results = await Task.Run(() => {return search.rangeSearch(lower, upper); });
                     }
 
                 } else {
