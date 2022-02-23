@@ -166,7 +166,7 @@ namespace File_Finder {
                     if (recursive) {
                         results = await Task.Run(() => { return search.rangeSearchRecur(lower, upper, path); });
                     } else {
-                        results = await Task.Run(() => {return search.rangeSearch(lower, upper); });
+                        results = await Task.Run(() => { return search.rangeSearch(lower, upper); });
                     }
 
                 } else {

@@ -22,7 +22,7 @@ namespace File_Finder {
         }
 
         public void test3() {
-            ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 0, "motor", true);
+            ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 1, "0-10000", true);
         }
     }
 }

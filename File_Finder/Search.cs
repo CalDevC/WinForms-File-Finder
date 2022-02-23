@@ -38,11 +38,9 @@ namespace File_Finder {
                     if (ui.getCancel()) {
                         return results;
                     }
-
+                    
                     //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate {
-                        ui.updateStatus(searchMsg + filepath);
-                    });
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
@@ -83,9 +81,6 @@ namespace File_Finder {
                 subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
             }
 
-
-
-
             //For each file type
             foreach (var type in fileTypes) {
 
@@ -94,10 +89,12 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    if (ui.getCancel()) {
+                        return results;
+                    }
+                    
                     //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate {
-                        ui.updateStatus(searchMsg + filepath);
-                    });
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
@@ -113,6 +110,8 @@ namespace File_Finder {
             return results;
         }
 
+
+
         //***** Non-recursive range search *****//
         public Dictionary<string, bool> rangeSearch(int lower, int upper) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
@@ -125,9 +124,7 @@ namespace File_Finder {
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
                     //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate {
-                        ui.updateStatus(searchMsg + filepath);
-                    });
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
                     string filename = filepath.Split("\\").Last();
 
@@ -195,10 +192,12 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    if (ui.getCancel()) {
+                        return results;
+                    }
+
                     //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate {
-                        ui.updateStatus(searchMsg + filepath);
-                    });
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
                     string filename = filepath.Split("\\").Last();
 
