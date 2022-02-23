@@ -124,7 +124,7 @@
             // 
             // searchBtn
             // 
-            this.searchBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.searchBtn.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.searchBtn.Location = new System.Drawing.Point(166, 244);
             this.searchBtn.Name = "searchBtn";
             this.searchBtn.Size = new System.Drawing.Size(75, 23);
@@ -277,7 +277,7 @@
             // 
             // cancelBtn
             // 
-            this.cancelBtn.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.cancelBtn.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.cancelBtn.Location = new System.Drawing.Point(247, 244);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);

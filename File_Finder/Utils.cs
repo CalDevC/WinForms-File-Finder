@@ -4,11 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+/*
+ This class holds utility functions 
+ to be used throughout the program.
+ */
+
 namespace File_Finder {
     internal class Utils {
 
+        //Constructor
         public Utils() { }
 
+        //Get the total number of directories withint the given directory
+        //either recursively or nonrecursively
         public int getNumDirs(string path, bool recursive) {
             int sum = 0;
 
@@ -23,6 +31,7 @@ namespace File_Finder {
             return sum;
         }
 
+        //Write message to debug console
         public void consoleLog(string msg) {
             System.Diagnostics.Debug.WriteLine(msg);
         }
