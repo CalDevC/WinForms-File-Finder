@@ -20,8 +20,21 @@ namespace File_Finder {
             label3.Hide();
             label4.Hide();
             cancelBtn.Enabled = false;
-
+            darkModeOn();
             test.test3();
+        }
+
+        //Set Dark Mode
+        private void darkModeOn() {
+            Color dark = SystemColors.ControlDark;
+            Color darker = SystemColors.ControlDarkDark;
+            Color light = SystemColors.Control;
+
+            ForeColor = light;
+            BackColor = dark;
+            foundFiles.BackColor = darker;
+            foundFilesPath.BackColor = darker;
+            notDetected.BackColor = darker;
         }
 
         //Allows unit tests to fill out the form
@@ -40,8 +53,6 @@ namespace File_Finder {
             
             recurCheckBox.Checked = recursive;
         }
-
-        
 
         //On dropdown value change
         private void searchTermType_Change(object sender, EventArgs e) {
