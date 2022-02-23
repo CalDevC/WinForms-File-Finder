@@ -252,16 +252,18 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusBar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 639);
+            this.statusStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
+            this.statusStrip1.Location = new System.Drawing.Point(0, 641);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(458, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(458, 20);
             this.statusStrip1.TabIndex = 19;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // statusBar
             // 
+            this.statusBar.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.statusBar.Name = "statusBar";
-            this.statusBar.Size = new System.Drawing.Size(39, 17);
+            this.statusBar.Size = new System.Drawing.Size(39, 15);
             this.statusBar.Text = "Ready";
             // 
             // cancelBtn
