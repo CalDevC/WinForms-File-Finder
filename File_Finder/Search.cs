@@ -39,6 +39,11 @@ namespace File_Finder {
                         return results;
                     }
 
+                    //Update UI status bar
+                    ui.Invoke((MethodInvoker)delegate {
+                        ui.updateStatus(searchMsg + filepath);
+                    });
+
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
                         results.Add(filepath, true);  //Append the found file names to temp found
@@ -90,7 +95,9 @@ namespace File_Finder {
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
                     //Update UI status bar
-                    
+                    ui.Invoke((MethodInvoker)delegate {
+                        ui.updateStatus(searchMsg + filepath);
+                    });
 
                     string filename = filepath.Split("\\").Last();
                     if (filename.ToLower().Contains(searchTerm)) {
@@ -117,6 +124,11 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    //Update UI status bar
+                    ui.Invoke((MethodInvoker)delegate {
+                        ui.updateStatus(searchMsg + filepath);
+                    });
+
                     string filename = filepath.Split("\\").Last();
 
                     //For each number in the range
@@ -183,6 +195,11 @@ namespace File_Finder {
 
                 //Get all filenames that contain the search term
                 foreach (string filepath in fileList) {
+                    //Update UI status bar
+                    ui.Invoke((MethodInvoker)delegate {
+                        ui.updateStatus(searchMsg + filepath);
+                    });
+
                     string filename = filepath.Split("\\").Last();
 
                     //For each number in the range

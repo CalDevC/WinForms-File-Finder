@@ -97,7 +97,7 @@ namespace File_Finder {
                 MessageBoxIcon.Exclamation
             );
         }
-
+        
         public bool getCancel() {
             return cancel;
         }
