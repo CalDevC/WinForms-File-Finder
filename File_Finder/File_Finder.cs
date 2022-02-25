@@ -188,7 +188,7 @@ namespace File_Finder {
                         throw new Exception("No search term was entered, aborting search.");
                     }
 
-                    performanceTimer.Start();
+                    performanceTimer.Restart();
                     //Run either recursive or nonrecursive phrase search
                     results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
 
@@ -200,7 +200,7 @@ namespace File_Finder {
                         throw new Exception("Invalid range: lower bound must be less than or equal to upper value.");
                     }
 
-                    performanceTimer.Start();
+                    performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
                     results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
 
