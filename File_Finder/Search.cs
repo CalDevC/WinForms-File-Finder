@@ -59,6 +59,7 @@ namespace File_Finder {
         }
 
 
+
         //***** Recursive phrase search *****//
         public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
@@ -161,6 +162,7 @@ namespace File_Finder {
 
             return results;
         }
+
 
 
         //***** Recursive range search *****//
