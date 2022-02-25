@@ -22,94 +22,119 @@ namespace File_Finder {
             this.util = new Utils();
         }
 
-        //***** Non-recursive phrase search *****//
-        public Dictionary<string, bool> phraseSearch(string searchTerm) {
-            Dictionary<string, bool> results = new Dictionary<string, bool>();
+
+        public void phraseSearch(string searchTerm) {
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Search in progress..."); });
             searchTerm = searchTerm.ToLower();
 
             //For each file type
             foreach (var type in fileTypes) {
-
-                //Get all file names of the current type that contain the search term
-                var fileList = Directory.GetFiles(path, "*" + type);
-
-                //Get all filenames that contain the search term
-                foreach (string filepath in fileList) {
-                    if (ui.getCancel()) {
-                        return results;
-                    }
-                    
-                    //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
-
-                    string filename = filepath.Split("\\").Last();
-                    if (filename.ToLower().Contains(searchTerm)) {
-                        results.Add(filepath, true);  //Append the found file names to temp found
-                    }
-
+                foreach (var result in Directory.EnumerateFiles(path, $"*{searchTerm}*" + type, SearchOption.TopDirectoryOnly)) {
+                    ui.Invoke((MethodInvoker)delegate { ui.updateFound(result); });
                 }
             }
-
-            if (results.Count == 0) {
-                results.Add(searchTerm, false);
-            }
-
-
-            return results;
         }
 
+        public void phraseSearchRecur(string searchTerm) {
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Search in progress..."); });
+            searchTerm = searchTerm.ToLower();
+
+            //For each file type
+            foreach (var type in fileTypes) {
+                foreach (var result in Directory.EnumerateFiles(path, $"*{searchTerm}*" + type, SearchOption.AllDirectories)) {
+                    ui.Invoke((MethodInvoker)delegate { ui.updateFound(result); });
+                }
+            }
+        }
+
+        ////***** Non-recursive phrase search *****//
+        //public Dictionary<string, bool> phraseSearch(string searchTerm) {
+        //    Dictionary<string, bool> results = new Dictionary<string, bool>();
+        //    searchTerm = searchTerm.ToLower();
+
+        //    //For each file type
+        //    foreach (var type in fileTypes) {
+
+        //        //Get all file names of the current type that contain the search term
+        //        var fileList = Directory.GetFiles(path, "*" + type);
+
+        //        //Get all filenames that contain the search term
+        //        foreach (string filepath in fileList) {
+        //            if (ui.getCancel()) {
+        //                return results;
+        //            }
+
+        //            //Update UI status bar
+        //            ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
+
+        //            string filename = filepath.Split("\\").Last();
+        //            if (filename.ToLower().Contains(searchTerm)) {
+        //                results.Add(filepath, true);  //Append the found file names to temp found
+        //            }
+
+        //        }
+        //    }
+
+        //    if (results.Count == 0) {
+        //        results.Add(searchTerm, false);
+        //    }
+
+
+        //    return results;
+
+        //}
 
 
         //***** Recursive phrase search *****//
-        public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
-            Dictionary<string, bool> results = new Dictionary<string, bool>();
-            searchTerm = searchTerm.ToLower();
+        //public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
+        //    Dictionary<string, bool> results = new Dictionary<string, bool>();
+        //    searchTerm = searchTerm.ToLower();
 
-            //For each found directory do a recursive phrase search
-            foreach (var directory in Directory.GetDirectories(path)) {
-                if (ui.getCancel()) {
-                    return results;
-                }
+        //    //For each found directory do a recursive phrase search
+        //    foreach (var directory in Directory.GetDirectories(path)) {
+        //        if (ui.getCancel()) {
+        //            return results;
+        //        }
 
-                Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
+        //        Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
 
-                //Remove any non-detections that may have been added by a subdirectory
-                foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
-                    subdirResults.Remove(item.Key);
-                }
+        //        //Remove any non-detections that may have been added by a subdirectory
+        //        foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
+        //            subdirResults.Remove(item.Key);
+        //        }
 
-                //Combine the subdirectory results with the overall results
-                subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
-            }
+        //        //Combine the subdirectory results with the overall results
+        //        subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
+        //    }
 
-            //For each file type
-            foreach (var type in fileTypes) {
+        //    //For each file type
+        //    foreach (var type in fileTypes) {
 
-                //Get all file names of the current type that contain the search term
-                var fileList = Directory.GetFiles(path, "*" + type);
+        //        //Get all file names of the current type that contain the search term
+        //        var fileList = Directory.GetFiles(path, "*" + type);
 
-                //Get all filenames that contain the search term
-                foreach (string filepath in fileList) {
-                    if (ui.getCancel()) {
-                        return results;
-                    }
+        //        //Get all filenames that contain the search term
+        //        foreach (string filepath in fileList) {
+        //            if (ui.getCancel()) {
+        //                return results;
+        //            }
                     
-                    //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
+        //            //Update UI status bar
+        //            ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
-                    string filename = filepath.Split("\\").Last();
-                    if (filename.ToLower().Contains(searchTerm)) {
-                        results.Add(filepath, true);  //Append the found file names to temp found
-                    }
-                }
-            }
+        //            string filename = filepath.Split("\\").Last();
+        //            if (filename.ToLower().Contains(searchTerm)) {
+        //                results.Add(filepath, true);  //Append the found file names to temp found
+        //            }
+        //        }
+        //    }
 
-            if (results.Count == 0) {
-                results.Add(searchTerm, false);
-            }
+        //    if (results.Count == 0) {
+        //        results.Add(searchTerm, false);
+        //    }
 
-            return results;
-        }
+        //    return results;
+        //}
 
 
 

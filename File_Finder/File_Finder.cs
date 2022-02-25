@@ -140,6 +140,10 @@ namespace File_Finder {
                 return $"Search completed in {timeMS / 60000} minutes and {(timeMS % 60000) / 1000} seconds";
         }
 
+        public void updateFound(string filepath) {
+            foundFiles.Items.Add(filepath);
+        }
+
         //On Search button clicked
         private async void searchBtn_Click(object sender, EventArgs e) {
             //Initialize variables with user input
@@ -190,7 +194,8 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive phrase search
-                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
+                    //results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
+                    await Task.Run(() => { search.phraseSearchRecur(searchTerm); });
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
                     int lower = Int32.Parse(lowerBound.Text);
@@ -202,7 +207,7 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
-                    results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+                    //results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
 
                 } else {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
@@ -225,7 +230,7 @@ namespace File_Finder {
             util.consoleLog(timeOutput);
 
             //Output found files to the form
-            outputResults(results);
+            //outputResults(results);
 
             //Enable proper buttons
             cancelBtn.Enabled = false;
