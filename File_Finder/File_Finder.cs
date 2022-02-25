@@ -77,19 +77,9 @@ namespace File_Finder {
         }
 
         //Output results to the GUI
-        private void outputResults(Dictionary<string, bool> results) {
-            foreach (KeyValuePair<string, bool> entry in results) {
-                if (entry.Value == true) {
-                    string filepath = entry.Key;
-                    string filename = filepath.Split("\\").Last();
-                    foundFiles.Items.Add(filename);
-                    foundFilesPath.Items.Add(filepath);
-                } else if (entry.Value == false) {
-                    notDetected.Items.Add(entry.Key);
-                } else {
-                    errorPopup("Result dictionary error: key value was neither true nor false.", "Error");
-                }
-
+        private void outputResults(List<string> termsNotFound) {
+            foreach (var term in termsNotFound) {
+                notDetected.Items.Add(term);
             }
         }
 
@@ -151,6 +141,7 @@ namespace File_Finder {
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
+            List<string> termsNotFound = new List<string>();
 
             //Check path validity
             if (path == "" || !Directory.Exists(path)) {
@@ -194,8 +185,7 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive phrase search
-                    //results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
-                    await Task.Run(() => { search.phraseSearchRecur(searchTerm); });
+                    termsNotFound = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm) : search.phraseSearch(searchTerm); });
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
                     int lower = Int32.Parse(lowerBound.Text);
@@ -230,7 +220,7 @@ namespace File_Finder {
             util.consoleLog(timeOutput);
 
             //Output found files to the form
-            //outputResults(results);
+            outputResults(termsNotFound);
 
             //Enable proper buttons
             cancelBtn.Enabled = false;

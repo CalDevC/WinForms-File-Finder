@@ -23,28 +23,46 @@ namespace File_Finder {
         }
 
 
-        public void phraseSearch(string searchTerm) {
+        public List<string> phraseSearch(string searchTerm) {
             ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Search in progress..."); });
+            List<string> notFound = new List<string>();
+            bool found = false;
             searchTerm = searchTerm.ToLower();
 
             //For each file type
             foreach (var type in fileTypes) {
                 foreach (var result in Directory.EnumerateFiles(path, $"*{searchTerm}*" + type, SearchOption.TopDirectoryOnly)) {
                     ui.Invoke((MethodInvoker)delegate { ui.updateFound(result); });
+                    found = true;
                 }
             }
+
+            if (!found) {
+                notFound.Add(searchTerm);
+            }
+
+            return notFound;
         }
 
-        public void phraseSearchRecur(string searchTerm) {
+        public List<string> phraseSearchRecur(string searchTerm) {
             ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Search in progress..."); });
+            List<string> notFound = new List<string>();
+            bool found = false;
             searchTerm = searchTerm.ToLower();
 
             //For each file type
             foreach (var type in fileTypes) {
-                foreach (var result in Directory.EnumerateFiles(path, $"*{searchTerm}*" + type, SearchOption.AllDirectories)) {
+                foreach (var result in Directory.EnumerateFiles(path, $"*{searchTerm}*" + type, SearchOption.TopDirectoryOnly)) {
                     ui.Invoke((MethodInvoker)delegate { ui.updateFound(result); });
+                    found = true;
                 }
             }
+
+            if (!found) {
+                notFound.Add(searchTerm);
+            }
+
+            return notFound;
         }
 
         ////***** Non-recursive phrase search *****//
