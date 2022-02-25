@@ -20,7 +20,7 @@ namespace File_Finder {
             label3.Hide();
             label4.Hide();
             cancelBtn.Enabled = false;
-            darkModeOn();
+            //darkModeOn();
             test.test3();
         }
 
@@ -31,10 +31,12 @@ namespace File_Finder {
             Color light = SystemColors.Control;
 
             ForeColor = light;
-            BackColor = dark;
-            foundFiles.BackColor = darker;
-            foundFilesPath.BackColor = darker;
-            notDetected.BackColor = darker;
+            BackColor = darker;
+            foundFiles.BackColor = dark;
+            foundFilesPath.BackColor = dark;
+            notDetected.BackColor = dark;
+            searchBtn.BackColor = dark;
+            
         }
 
         //Allows unit tests to fill out the form
