@@ -1,9 +1,11 @@
+using System.Diagnostics;
 
 namespace File_Finder {
     public partial class File_Finder : Form {
 
         Utils util = new Utils();
         bool cancel = false;
+        Stopwatch performanceTimer = new Stopwatch();
 
         //Constructor
         public File_Finder() {
@@ -21,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test3();
+            test.test4();
         }
 
         //Set Dark Mode
@@ -128,6 +130,16 @@ namespace File_Finder {
             searchBtn.Enabled = true;
         }
 
+        //Convert performance timer output to human readable format
+        string convertTime(long timeMS) {
+            if (timeMS < 1000)
+                return $"Search completed in {timeMS} milliseconds";
+            else if (timeMS < 60000)
+                return $"Search completed in {timeMS / 1000} seconds";
+            else
+                return $"Search completed in {timeMS / 60000} minutes and {(timeMS % 60000) / 1000} seconds";
+        }
+
         //On Search button clicked
         private async void searchBtn_Click(object sender, EventArgs e) {
             //Initialize variables with user input
@@ -151,7 +163,7 @@ namespace File_Finder {
                     "Search Warning"
                 );
 
-                if(selection == DialogResult.Cancel) {
+                if (selection == DialogResult.Cancel) {
                     return;
                 }
             }
@@ -176,8 +188,9 @@ namespace File_Finder {
                         throw new Exception("No search term was entered, aborting search.");
                     }
 
+                    performanceTimer.Start();
                     //Run either recursive or nonrecursive phrase search
-                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); } );
+                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
                     int lower = Int32.Parse(lowerBound.Text);
@@ -187,6 +200,7 @@ namespace File_Finder {
                         throw new Exception("Invalid range: lower bound must be less than or equal to upper value.");
                     }
 
+                    performanceTimer.Start();
                     //Run either recursive or nonrecursive range search
                     results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
 
@@ -194,17 +208,21 @@ namespace File_Finder {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
                 }
 
-            } catch(Exception err){ //Catch if there is an invalid search type
+            } catch (Exception err) { //Catch if there is an invalid search type
                 util.consoleLog(err.Message);
                 errorPopup(err.Message + " Aborting search.", "Search Error");
             }
+
+            performanceTimer.Stop();
 
             if (cancel) {
                 statusBar.Text = "CANCELLED";
                 return;
             }
 
-            statusBar.Text = "DONE";
+            string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
+            statusBar.Text = timeOutput;
+            util.consoleLog(timeOutput);
 
             //Output found files to the form
             outputResults(results);
