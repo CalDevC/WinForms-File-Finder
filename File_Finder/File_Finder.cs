@@ -179,7 +179,7 @@ namespace File_Finder {
             Search search = new Search(this, path, fileTypes);
             Dictionary<string, bool> results = new Dictionary<string, bool>();
 
-            //Try to do a search and catch any additioanl user input issues
+            //Try to do a search and catch any additional user input issues
             try {
                 if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
                     string searchTerm = phraseTextBox.Text;

@@ -54,7 +54,6 @@ namespace File_Finder {
                 results.Add(searchTerm, false);
             }
 
-
             return results;
         }
 
@@ -65,10 +64,11 @@ namespace File_Finder {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
             searchTerm = searchTerm.ToLower();
 
-            //For each found directory do a recursive phrase search
-            foreach (var directory in Directory.GetDirectories(path)) {
+            //var thread = new Thread(() => {
+            Parallel.ForEach(Directory.GetDirectories(path), (directory, state) => {
                 if (ui.getCancel()) {
-                    return results;
+                    state.Stop();
+                    return;
                 }
 
                 Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
@@ -80,7 +80,29 @@ namespace File_Finder {
 
                 //Combine the subdirectory results with the overall results
                 subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
-            }
+            });
+            //});
+            //    thread.Start();
+            //    thread.Join();
+
+            //*************** CODE THAT WAS REPLACED BY Parallel.ForEach() **************//
+            ////For each found directory do a recursive phrase search
+            //foreach (var directory in Directory.GetDirectories(path)) {
+            //    if (ui.getCancel()) {
+            //        return results;
+            //    }
+
+            //    Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
+
+            //    //Remove any non-detections that may have been added by a subdirectory
+            //    foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
+            //        subdirResults.Remove(item.Key);
+            //    }
+
+            //    //Combine the subdirectory results with the overall results
+            //    subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
+            //}
+            //*************** END OF CODE THAT WAS REPLACED BY Parallel.ForEach() **************//
 
             //For each file type
             foreach (var type in fileTypes) {
