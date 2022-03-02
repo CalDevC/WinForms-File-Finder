@@ -38,7 +38,7 @@ namespace File_Finder {
                     if (ui.getCancel()) {
                         return results;
                     }
-                    
+
                     //Update UI status bar
                     ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
@@ -57,72 +57,38 @@ namespace File_Finder {
             return results;
         }
 
-
-
         //***** Recursive phrase search *****//
         public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
             searchTerm = searchTerm.ToLower();
 
-            //var thread = new Thread(() => {
-            Parallel.ForEach(Directory.GetDirectories(path), (directory, state) => {
-                if (ui.getCancel()) {
-                    state.Stop();
-                    return;
-                }
-
-                Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
-
-                //Remove any non-detections that may have been added by a subdirectory
-                foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
-                    subdirResults.Remove(item.Key);
-                }
-
-                //Combine the subdirectory results with the overall results
-                subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
-            });
-            //});
-            //    thread.Start();
-            //    thread.Join();
-
-            //*************** CODE THAT WAS REPLACED BY Parallel.ForEach() **************//
-            ////For each found directory do a recursive phrase search
-            //foreach (var directory in Directory.GetDirectories(path)) {
-            //    if (ui.getCancel()) {
-            //        return results;
-            //    }
-
-            //    Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
-
-            //    //Remove any non-detections that may have been added by a subdirectory
-            //    foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
-            //        subdirResults.Remove(item.Key);
-            //    }
-
-            //    //Combine the subdirectory results with the overall results
-            //    subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
-            //}
-            //*************** END OF CODE THAT WAS REPLACED BY Parallel.ForEach() **************//
-
+            var dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
             //For each file type
+            string[] fileList = { };
             foreach (var type in fileTypes) {
-
-                //Get all file names of the current type that contain the search term
-                var fileList = Directory.GetFiles(path, "*" + type);
-
-                //Get all filenames that contain the search term
-                foreach (string filepath in fileList) {
+                if (ui.getCancel()) {
+                    return results;
+                }
+                fileList = Directory.GetFiles(path, "*" + type);
+                foreach (var dir in dirs) {
+                    //Update UI status bar
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + dir); });
                     if (ui.getCancel()) {
                         return results;
                     }
-                    
-                    //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
+                    fileList = fileList.Concat(Directory.GetFiles(dir, "*" + type)).ToArray();
+                }
+            }
 
-                    string filename = filepath.Split("\\").Last();
-                    if (filename.ToLower().Contains(searchTerm)) {
-                        results.Add(filepath, true);  //Append the found file names to temp found
-                    }
+            //Get all filenames that contain the search term
+            foreach (string filepath in fileList) {
+                if (ui.getCancel()) {
+                    return results;
+                }
+
+                string filename = filepath.Split("\\").Last();
+                if (filename.ToLower().Contains(searchTerm)) {
+                    results.Add(filepath, true);  //Append the found file names to temp found
                 }
             }
 
