@@ -37,9 +37,5 @@ namespace File_Finder {
         public void test4() {
             ui.setUIValues("\\\\upifile1\\vidar\\MAXIMO_Linked_Documents", ".pdf,.jpg", 0, "vk", true);
         }
-
-        public void test5() {
-            ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 0, "motor", true);
-        }
     }
 }

@@ -38,7 +38,7 @@ namespace File_Finder {
                     if (ui.getCancel()) {
                         return results;
                     }
-
+                    
                     //Update UI status bar
                     ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
@@ -54,41 +54,53 @@ namespace File_Finder {
                 results.Add(searchTerm, false);
             }
 
+
             return results;
         }
+
+
 
         //***** Recursive phrase search *****//
         public Dictionary<string, bool> phraseSearchRecur(string searchTerm, string path) {
             Dictionary<string, bool> results = new Dictionary<string, bool>();
             searchTerm = searchTerm.ToLower();
 
-            var dirs = Directory.GetDirectories(path, "*", SearchOption.AllDirectories);
-            //For each file type
-            string[] fileList = { };
-            foreach (var type in fileTypes) {
+            //For each found directory do a recursive phrase search
+            foreach (var directory in Directory.GetDirectories(path)) {
                 if (ui.getCancel()) {
                     return results;
                 }
-                fileList = Directory.GetFiles(path, "*" + type);
-                foreach (var dir in dirs) {
-                    //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + dir); });
+
+                Dictionary<string, bool> subdirResults = phraseSearchRecur(searchTerm, directory);
+
+                //Remove any non-detections that may have been added by a subdirectory
+                foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
+                    subdirResults.Remove(item.Key);
+                }
+
+                //Combine the subdirectory results with the overall results
+                subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
+            }
+
+            //For each file type
+            foreach (var type in fileTypes) {
+
+                //Get all file names of the current type that contain the search term
+                var fileList = Directory.GetFiles(path, "*" + type);
+
+                //Get all filenames that contain the search term
+                foreach (string filepath in fileList) {
                     if (ui.getCancel()) {
                         return results;
                     }
-                    fileList = fileList.Concat(Directory.GetFiles(dir, "*" + type)).ToArray();
-                }
-            }
+                    
+                    //Update UI status bar
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
 
-            //Get all filenames that contain the search term
-            foreach (string filepath in fileList) {
-                if (ui.getCancel()) {
-                    return results;
-                }
-
-                string filename = filepath.Split("\\").Last();
-                if (filename.ToLower().Contains(searchTerm)) {
-                    results.Add(filepath, true);  //Append the found file names to temp found
+                    string filename = filepath.Split("\\").Last();
+                    if (filename.ToLower().Contains(searchTerm)) {
+                        results.Add(filepath, true);  //Append the found file names to temp found
+                    }
                 }
             }
 
