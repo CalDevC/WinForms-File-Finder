@@ -50,12 +50,15 @@ namespace File_Finder {
                 if (ui.getCancel()) { return fileList; }
                 fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
             }
-            
-            foreach (string d in Directory.GetDirectories(path)) {
-                if (ui.getCancel()) { return fileList; }
+
+            Parallel.ForEach(Directory.GetDirectories(path), (d, state) => {
+                if (ui.getCancel()) {
+                    state.Stop();
+                    return; 
+                }
                 ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
                 getAllFiles(d, fileList, searchTerm);
-            }
+            });
             return fileList;
         }
 
