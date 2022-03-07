@@ -45,33 +45,30 @@ namespace File_Finder {
         }
 
         //Gather files
-        private List<string> getAllFiles(string path, List<string> fileList, string searchTerm, string type) {
-            fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
+        private List<string> getAllFiles(string path, List<string> fileList, string searchTerm) {
+            foreach(var type in fileTypes) {
+                if (ui.getCancel()) { return fileList; }
+                fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
+            }
+            
             foreach (string d in Directory.GetDirectories(path)) {
-                if (ui.getCancel()) {
-                    return fileList;
-                }
+                if (ui.getCancel()) { return fileList; }
                 ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
-                getAllFiles(d, fileList, searchTerm, type);
+                getAllFiles(d, fileList, searchTerm);
             }
             return fileList;
         }
 
         //***** Recursive phrase search *****//
         public List<string> phraseSearchRecur(string searchTerm, string path) {
-            //Dictionary<string, bool> results = new Dictionary<string, bool>();
             searchTerm = searchTerm.ToLower();
             List<string> fileList = new List<string>();
-            List<string> prev = fileList.ToList();
 
             //For each found directory do a recursive phrase search
-            foreach (var type in fileTypes) {
-                fileList = getAllFiles(path, fileList, searchTerm, type);
-                if(fileList == prev) {
-                    util.consoleLog("NOT FOUND\n");
-                    fileList.Add(searchTerm);
-                }
-                prev = fileList.ToList();
+            fileList = getAllFiles(path, fileList, searchTerm);
+            if(fileList.Count == 0) {
+                util.consoleLog("NOT FOUND\n");
+                fileList.Add(searchTerm);
             }
 
             return fileList;
