@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test4();
+            test.test5();
         }
 
         //Set Dark Mode
@@ -77,21 +77,17 @@ namespace File_Finder {
         }
 
         //Output results to the GUI
-        private void outputResults(Dictionary<string, bool> results) {
-            foreach (KeyValuePair<string, bool> entry in results) {
-                if (entry.Value == true) {
-                    string filepath = entry.Key;
-                    string filename = filepath.Split("\\").Last();
-                    foundFiles.Items.Add(filename);
-                    foundFilesPath.Items.Add(filepath);
-                } else if (entry.Value == false) {
-                    notDetected.Items.Add(entry.Key);
+        private void outputResults(List<string> files, string searchTerm) {
+            foreach (var file in files) {
+                if(file == searchTerm) {
+                    notDetected.Items.Add(file);
                 } else {
-                    errorPopup("Result dictionary error: key value was neither true nor false.", "Error");
+                    foundFiles.Items.Add(file);
                 }
-
+                
             }
         }
+
 
         //Update the status bar
         public void updateStatus(string text) {
@@ -147,6 +143,7 @@ namespace File_Finder {
             string searchType = searchTermType.Text;
             bool recursive = recurCheckBox.Checked;
             string fileTypes = fileTypesTextBox.Text;
+            string searchTerm = "";
 
             //Check path validity
             if (path == "" || !Directory.Exists(path)) {
@@ -177,12 +174,12 @@ namespace File_Finder {
             notDetected.Items.Clear();
 
             Search search = new Search(this, path, fileTypes);
-            Dictionary<string, bool> results = new Dictionary<string, bool>();
+            List<string> results = new List<string>();
 
             //Try to do a search and catch any additioanl user input issues
             try {
                 if (searchType == "Keyword Phrase") {  //PHRASE SEARCH  
-                    string searchTerm = phraseTextBox.Text;
+                    searchTerm = phraseTextBox.Text;
 
                     if (searchTerm == "") {
                         throw new Exception("No search term was entered, aborting search.");
@@ -202,7 +199,7 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
-                    results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+                    //results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
 
                 } else {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
@@ -225,7 +222,7 @@ namespace File_Finder {
             util.consoleLog(timeOutput);
 
             //Output found files to the form
-            outputResults(results);
+            outputResults(results, searchTerm);
 
             //Enable proper buttons
             cancelBtn.Enabled = false;
