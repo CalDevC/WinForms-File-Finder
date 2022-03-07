@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test5();
+            test.test7();
         }
 
         //Set Dark Mode
@@ -76,17 +76,37 @@ namespace File_Finder {
             }
         }
 
-        //Output results to the GUI
-        private void outputResults(List<string> files, string searchTerm) {
-            foreach (var file in files) {
-                if(file == searchTerm) {
-                    notDetected.Items.Add(file);
+        //Output results to the GUI for phrase search
+        private void outputPhraseResults(List<string> files, string searchTerm) {
+            foreach (var filepath in files) {
+                if (filepath == searchTerm) {
+                    notDetected.Items.Add(filepath);
                 } else {
-                    foundFiles.Items.Add(file);
+                    string filename = filepath.Split("\\").Last();
+                    foundFiles.Items.Add(filename);
+                    foundFilesPath.Items.Add(filepath);
                 }
-                
             }
         }
+
+        //Output results to the GUI for range search
+        private void outputRangeResults(Dictionary<string, bool> results) {
+            foreach (KeyValuePair<string, bool> entry in results) {
+                if (entry.Value == true) {
+                    string filepath = entry.Key;
+                    string filename = filepath.Split("\\").Last();
+                    foundFiles.Items.Add(filename);
+                    foundFilesPath.Items.Add(filepath);
+                } else if (entry.Value == false) {
+                    notDetected.Items.Add(entry.Key);
+                } else {
+                    errorPopup("Result dictionary error: key value was neither true nor false.", "Error");
+                }
+
+            }
+
+        }
+
 
 
         //Update the status bar
@@ -174,7 +194,6 @@ namespace File_Finder {
             notDetected.Items.Clear();
 
             Search search = new Search(this, path, fileTypes);
-            List<string> results = new List<string>();
 
             //Try to do a search and catch any additioanl user input issues
             try {
@@ -187,9 +206,24 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive phrase search
-                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
+                    List<string> results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
+
+                    performanceTimer.Stop();
+
+                    if (cancel) {
+                        statusBar.Text = "CANCELLED";
+                        return;
+                    }
+
+                    string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
+                    statusBar.Text = timeOutput;
+                    util.consoleLog(timeOutput);
+
+                    //Output found files to the form
+                    outputPhraseResults(results, searchTerm);
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
+                    searchTerm = lowerBound.Text + "-" + upperBound.Text;
                     int lower = Int32.Parse(lowerBound.Text);
                     int upper = Int32.Parse(upperBound.Text);
 
@@ -199,8 +233,22 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
-                    //results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+                    Dictionary<string, bool> results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
 
+                    performanceTimer.Stop();
+
+                    if (cancel) {
+                        statusBar.Text = "CANCELLED";
+                        return;
+                    }
+
+                    string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
+                    statusBar.Text = timeOutput;
+                    util.consoleLog(timeOutput);
+
+                    //Output found files to the form
+                    outputRangeResults(results);
+                    
                 } else {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
                 }
@@ -209,20 +257,6 @@ namespace File_Finder {
                 util.consoleLog(err.Message);
                 errorPopup(err.Message + " Aborting search.", "Search Error");
             }
-
-            performanceTimer.Stop();
-
-            if (cancel) {
-                statusBar.Text = "CANCELLED";
-                return;
-            }
-
-            string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
-            statusBar.Text = timeOutput;
-            util.consoleLog(timeOutput);
-
-            //Output found files to the form
-            outputResults(results, searchTerm);
 
             //Enable proper buttons
             cancelBtn.Enabled = false;

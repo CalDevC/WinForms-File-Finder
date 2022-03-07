@@ -45,5 +45,9 @@ namespace File_Finder {
         public void test6() {
             ui.setUIValues("\\\\upifile1\\vidar\\MAXIMO_Linked_Documents\\Manufacturers_Procedures", ".pdf,.doc", 0, "manual", true);
         }
+
+        public void test7() {
+            ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 1, "0-10000", false);
+        }
     }
 }
