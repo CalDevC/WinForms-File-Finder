@@ -65,7 +65,7 @@ namespace File_Finder {
         }
 
         //***** Recursive phrase search *****//
-        public List<string> phraseSearchRecur(string searchTerm, string path) {
+        public List<string> phraseSearchRecur(string searchTerm) {
             searchTerm = searchTerm.ToLower();
             List<string> fileList = new List<string>();
 
@@ -143,7 +143,7 @@ namespace File_Finder {
         }
 
         //***** Recursive range search *****//
-        public List<string> rangeSearchRecur(int lower, int upper, string path) {
+        public List<string> rangeSearchRecur(int lower, int upper) {
             List<string> fileList = new List<string>();
             List<string> rangeVals = new List<string>();
 

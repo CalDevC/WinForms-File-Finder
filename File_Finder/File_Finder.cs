@@ -211,7 +211,7 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive phrase search
-                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
+                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm) : search.phraseSearch(searchTerm); });
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
                     searchTerm = lowerBound.Text + "-" + upperBound.Text;
@@ -224,7 +224,7 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
-                    results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+                    results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper) : search.rangeSearch(lower, upper); });
 
                 } else {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
