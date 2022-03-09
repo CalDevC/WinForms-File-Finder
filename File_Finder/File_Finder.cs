@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test7();
+            test.test8();
         }
 
         //Set Dark Mode
@@ -105,6 +105,29 @@ namespace File_Finder {
 
             }
 
+        }
+
+        private void outputRecurPhraseResults(List<string> files, string searchTerm) {
+            updateStatus("Outputting found files...");
+
+            int lower = Int32.Parse(searchTerm.Split("-")[0]);
+            int upper = Int32.Parse(searchTerm.Split("-")[1]);
+
+            List<string> rangeVals = new List<string>();
+
+            for (int i = lower; i <= upper; i++) {
+                rangeVals.Add(i.ToString());
+            }
+
+            foreach (var filepath in files) {
+                string filename = filepath.Split("\\").Last();
+                if (rangeVals.Any(filename.Equals)) {
+                    notDetected.Items.Add(filename);
+                } else {
+                    foundFiles.Items.Add(filename);
+                    foundFilesPath.Items.Add(filepath);
+                }
+            }
         }
 
 
@@ -233,13 +256,25 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
-                    Dictionary<string, bool> results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+                    //Dictionary<string, bool> results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
+                    if (recursive) {
+                        List<string> results = await Task.Run(() => search.rangeSearchRecur(lower, upper, path));
+                        performanceTimer.Stop();
 
-                    performanceTimer.Stop();
+                        if (cancel) {
+                            statusBar.Text = "CANCELLED";
+                            return;
+                        }
+                        outputRecurPhraseResults(results, searchTerm);
+                    } else {
+                        Dictionary<string, bool> results = await Task.Run(() => search.rangeSearch(lower, upper));
+                        performanceTimer.Stop();
 
-                    if (cancel) {
-                        statusBar.Text = "CANCELLED";
-                        return;
+                        if (cancel) {
+                            statusBar.Text = "CANCELLED";
+                            return;
+                        }
+                        outputRangeResults(results);
                     }
 
                     string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
@@ -247,7 +282,7 @@ namespace File_Finder {
                     util.consoleLog(timeOutput);
 
                     //Output found files to the form
-                    outputRangeResults(results);
+                    //outputRangeResults(results);
                     
                 } else {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");

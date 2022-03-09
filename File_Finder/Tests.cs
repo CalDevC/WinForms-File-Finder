@@ -49,5 +49,9 @@ namespace File_Finder {
         public void test7() {
             ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 1, "0-10000", false);
         }
+
+        public void test8() {
+            ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 1, "2000-3000", true);
+        }
     }
 }

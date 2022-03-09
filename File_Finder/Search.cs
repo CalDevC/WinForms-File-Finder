@@ -158,73 +158,49 @@ namespace File_Finder {
         //        }
         //    }
 
+        //Gather files
+        private List<string> getAllFilesRange(string path, List<string> fileList, List<string> rangeVals) {
+            foreach (var type in fileTypes) {
+                if (ui.getCancel()) { return fileList; }
+                fileList.AddRange(Directory.GetFiles(path, $"*{type}").Where(filename => rangeVals.Any(filename.Split("\\").Last().Contains)));
+            }
+
+            Parallel.ForEach(Directory.GetDirectories(path), (d, state) => {
+                if (ui.getCancel()) {
+                    state.Stop();
+                    return;
+                }
+                ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
+                getAllFilesRange(d, fileList, rangeVals);
+            });
+            return fileList;
+        }
 
         //***** Recursive range search *****//
-        public Dictionary<string, bool> rangeSearchRecur(int lower, int upper, string path) {
-            Dictionary<string, bool> results = new Dictionary<string, bool>();
+        public List<string> rangeSearchRecur(int lower, int upper, string path) {
+            List<string> fileList = new List<string>();
+            List<string> rangeVals = new List<string>();
 
-            //For each found directory do a recursive range search
-            foreach (var directory in Directory.GetDirectories(path)) {
-                if (ui.getCancel()) {
-                    return results;
-                }
-
-                Dictionary<string, bool> subdirResults = rangeSearchRecur(lower, upper, directory);
-
-                //Remove any non-detections that may have been added by a subdirectory
-                foreach (var item in subdirResults.Where(x => x.Value == false).ToList()) {
-                    subdirResults.Remove(item.Key);
-                }
-
-                //Combine the subdirectory results with the overall results
-                subdirResults.ToList().ForEach(x => results[x.Key] = x.Value);
+            for (int i = lower; i <= upper; i++) {
+                rangeVals.Add(i.ToString());
             }
 
-            //For each file type
-            foreach (var type in fileTypes) {
+            List<string> notFound = rangeVals.ToList();
+            fileList = getAllFilesRange(path, fileList, rangeVals);
+            fileList.RemoveAll(item => item == null);
 
-                //Get all file names of the current type that contain the search term
-                var fileList = Directory.GetFiles(path, "*" + type);
-
-                //Get all filenames that contain the search term
-                foreach (string filepath in fileList) {
-                    if (ui.getCancel()) {
-                        return results;
-                    }
-
-                    //Update UI status bar
-                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
-
-                    string filename = filepath.Split("\\").Last();
-
-                    //For each number in the range
-                    for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
-                        if (filename.Contains(searchTerm.ToString())) {
-                            if (!results.ContainsKey(filepath)) {
-                                results.Add(filepath, true);  //Append the found file
-                            }
-                        }
+            foreach (var filepath in fileList) {
+                string filename = filepath.Split("\\").Last();
+                for (int i = lower; i <= upper; i++) {
+                    if (filename.Contains(i.ToString())) {
+                        notFound.Remove(i.ToString());
                     }
                 }
             }
 
-            //If term was not found
-            for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
-                bool notFound = true;
-                foreach (var entry in results) {
-                    if (entry.Key.Contains(searchTerm.ToString())) {
-                        notFound = false;
-                        break;
-                    }
-                }
+            fileList.AddRange(notFound);
 
-                if (notFound) {
-                    results.Add(searchTerm.ToString(), false);
-                }
-            }
-
-
-            return results;
+            return fileList;
         }
 
     }
