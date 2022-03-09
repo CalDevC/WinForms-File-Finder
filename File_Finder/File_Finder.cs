@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            //test.test8();
+            test.test7();
         }
 
         //Set Dark Mode
@@ -267,14 +267,14 @@ namespace File_Finder {
                         }
                         outputRecurPhraseResults(results, searchTerm);
                     } else {
-                        Dictionary<string, bool> results = await Task.Run(() => search.rangeSearch(lower, upper));
+                        List<string> results = await Task.Run(() => search.rangeSearch(lower, upper));
                         performanceTimer.Stop();
 
                         if (cancel) {
                             statusBar.Text = "CANCELLED";
                             return;
                         }
-                        outputRangeResults(results);
+                        outputRecurPhraseResults(results, searchTerm);
                     }
 
                     string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
