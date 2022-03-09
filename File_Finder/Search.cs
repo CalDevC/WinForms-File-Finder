@@ -57,6 +57,10 @@ namespace File_Finder {
                 ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
                 getAllFiles(d, fileList, searchTerm);
             });
+
+            //Update UI
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Outputting found files..."); });
+
             return fileList;
         }
 
@@ -74,95 +78,21 @@ namespace File_Finder {
                 fileList.Add(searchTerm);
             }
 
+            //Update UI
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Outputting found files..."); });
+
             return fileList;
         }
 
 
 
         //***** Non-recursive range search *****//
-        //public Dictionary<string, bool> rangeSearch(int lower, int upper) {
-        //    Dictionary<string, bool> results = new Dictionary<string, bool>();
-
-        //    //For each file type
-        //    foreach (var type in fileTypes) {
-        //        //Get all file names of the current type that contain the search term
-        //        var fileList = Directory.GetFiles(path, "*" + type);
-
-        //        //Get all filenames that contain the search term
-        //        foreach (string filepath in fileList) {
-        //            //Update UI status bar
-        //            ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
-
-        //            string filename = filepath.Split("\\").Last();
-
-        //            //For each number in the range
-        //            for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
-        //                if (ui.getCancel()) {
-        //                    return results;
-        //                }
-
-        //                if (filename.Contains(searchTerm.ToString())) {
-        //                    if (!results.ContainsKey(filepath)) {
-        //                        results.Add(filepath, true);  //Append the found file
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    //If term was not found
-        //    for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
-        //        bool notFound = true;
-        //        foreach (var entry in results) {
-        //            if (entry.Key.Contains(searchTerm.ToString())) {
-        //                notFound = false;
-        //                break;
-        //            }
-        //        }
-
-        //        if (notFound) {
-        //            results.Add(searchTerm.ToString(), false);
-        //        }
-        //    }
-
-
-        //    return results;
-        //}
-
-        //public List<string> rangeSearch(int lower, int upper) {
-        //    List<string> results = new List<string>();
-        //    List<string> prev = results.ToList();
-
-        //    //For each file type
-        //    foreach (var type in fileTypes) {
-        //        //Get all file names of the current type that contain the search term
-        //        var fileList = Directory.GetFiles(path, "*" + type);
-
-        //        //Get all filenames that contain the search term
-        //        foreach (string filepath in fileList) {
-        //            //Update UI status bar
-        //            ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + filepath); });
-
-        //            string filename = filepath.Split("\\").Last();
-
-        //            //For each number in the range
-        //            for (int searchTerm = lower; searchTerm <= upper; searchTerm++) {
-        //                if (ui.getCancel()) {
-        //                    return results;
-        //                }
-
-        //                if (filename.Contains(searchTerm.ToString())) {
-        //                    if (!results.Contains(filepath)) {
-        //                        results.Add(filepath);  //Append the found file
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
         public List<string> rangeSearch(int lower, int upper) {
             List<string> fileList = new List<string>();
             List<string> rangeVals = new List<string>();
+
+            //Update UI
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + path); });
 
             for (int i = lower; i <= upper; i++) {
                 rangeVals.Add(i.ToString());
@@ -187,6 +117,9 @@ namespace File_Finder {
             }
 
             fileList.AddRange(notFound);
+
+            //Update UI
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Outputting found files..."); });
 
             return fileList;
         }
@@ -232,6 +165,9 @@ namespace File_Finder {
             }
 
             fileList.AddRange(notFound);
+
+            //Update UI
+            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Outputting found files..."); });
 
             return fileList;
         }

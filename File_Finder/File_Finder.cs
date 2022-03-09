@@ -89,7 +89,7 @@ namespace File_Finder {
                     }
                 }
             } else if(searchType == "Number Range"){
-                updateStatus("Outputting found files...");
+                
 
                 int lower = Int32.Parse(searchTerm.Split("-")[0]);
                 int upper = Int32.Parse(searchTerm.Split("-")[1]);
@@ -242,6 +242,8 @@ namespace File_Finder {
                 return;
             }
 
+            cancelBtn.Enabled = false;
+
             //Output found files to the form
             outputResults(results, searchType, searchTerm);
 
@@ -250,7 +252,6 @@ namespace File_Finder {
             util.consoleLog(timeOutput);
 
             //Enable proper buttons
-            cancelBtn.Enabled = false;
             searchBtn.Enabled = true;
         }
 
