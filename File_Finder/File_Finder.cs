@@ -77,60 +77,41 @@ namespace File_Finder {
         }
 
         //Output results to the GUI for phrase search
-        private void outputPhraseResults(List<string> files, string searchTerm) {
-            foreach (var filepath in files) {
-                if (filepath == searchTerm) {
-                    notDetected.Items.Add(filepath);
-                } else {
+        private void outputResults(List<string> files, string searchType, string searchTerm) {
+            if(searchType == "Keyword Phrase") {
+                foreach (var filepath in files) {
+                    if (filepath == searchTerm) {
+                        notDetected.Items.Add(filepath);
+                    } else {
+                        string filename = filepath.Split("\\").Last();
+                        foundFiles.Items.Add(filename);
+                        foundFilesPath.Items.Add(filepath);
+                    }
+                }
+            } else if(searchType == "Number Range"){
+                updateStatus("Outputting found files...");
+
+                int lower = Int32.Parse(searchTerm.Split("-")[0]);
+                int upper = Int32.Parse(searchTerm.Split("-")[1]);
+
+                List<string> rangeVals = new List<string>();
+
+                for (int i = lower; i <= upper; i++) {
+                    rangeVals.Add(i.ToString());
+                }
+
+                foreach (var filepath in files) {
                     string filename = filepath.Split("\\").Last();
-                    foundFiles.Items.Add(filename);
-                    foundFilesPath.Items.Add(filepath);
+                    if (rangeVals.Any(filename.Equals)) {
+                        notDetected.Items.Add(filename);
+                    } else {
+                        foundFiles.Items.Add(filename);
+                        foundFilesPath.Items.Add(filepath);
+                    }
                 }
             }
+            
         }
-
-        //Output results to the GUI for range search
-        private void outputRangeResults(Dictionary<string, bool> results) {
-            foreach (KeyValuePair<string, bool> entry in results) {
-                if (entry.Value == true) {
-                    string filepath = entry.Key;
-                    string filename = filepath.Split("\\").Last();
-                    foundFiles.Items.Add(filename);
-                    foundFilesPath.Items.Add(filepath);
-                } else if (entry.Value == false) {
-                    notDetected.Items.Add(entry.Key);
-                } else {
-                    errorPopup("Result dictionary error: key value was neither true nor false.", "Error");
-                }
-
-            }
-
-        }
-
-        private void outputRecurPhraseResults(List<string> files, string searchTerm) {
-            updateStatus("Outputting found files...");
-
-            int lower = Int32.Parse(searchTerm.Split("-")[0]);
-            int upper = Int32.Parse(searchTerm.Split("-")[1]);
-
-            List<string> rangeVals = new List<string>();
-
-            for (int i = lower; i <= upper; i++) {
-                rangeVals.Add(i.ToString());
-            }
-
-            foreach (var filepath in files) {
-                string filename = filepath.Split("\\").Last();
-                if (rangeVals.Any(filename.Equals)) {
-                    notDetected.Items.Add(filename);
-                } else {
-                    foundFiles.Items.Add(filename);
-                    foundFilesPath.Items.Add(filepath);
-                }
-            }
-        }
-
-
 
         //Update the status bar
         public void updateStatus(string text) {
@@ -217,6 +198,7 @@ namespace File_Finder {
             notDetected.Items.Clear();
 
             Search search = new Search(this, path, fileTypes);
+            List<string> results = new List<string>();
 
             //Try to do a search and catch any additioanl user input issues
             try {
@@ -229,21 +211,7 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive phrase search
-                    List<string> results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
-
-                    performanceTimer.Stop();
-
-                    if (cancel) {
-                        statusBar.Text = "CANCELLED";
-                        return;
-                    }
-
-                    string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
-                    statusBar.Text = timeOutput;
-                    util.consoleLog(timeOutput);
-
-                    //Output found files to the form
-                    outputPhraseResults(results, searchTerm);
+                    results = await Task.Run(() => { return recursive ? search.phraseSearchRecur(searchTerm, path) : search.phraseSearch(searchTerm); });
 
                 } else if (searchType == "Number Range") {  //RANGE SEARCH
                     searchTerm = lowerBound.Text + "-" + upperBound.Text;
@@ -256,34 +224,8 @@ namespace File_Finder {
 
                     performanceTimer.Restart();
                     //Run either recursive or nonrecursive range search
-                    //Dictionary<string, bool> results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
-                    if (recursive) {
-                        List<string> results = await Task.Run(() => search.rangeSearchRecur(lower, upper, path));
-                        performanceTimer.Stop();
+                    results = await Task.Run(() => { return recursive ? search.rangeSearchRecur(lower, upper, path) : search.rangeSearch(lower, upper); });
 
-                        if (cancel) {
-                            statusBar.Text = "CANCELLED";
-                            return;
-                        }
-                        outputRecurPhraseResults(results, searchTerm);
-                    } else {
-                        List<string> results = await Task.Run(() => search.rangeSearch(lower, upper));
-                        performanceTimer.Stop();
-
-                        if (cancel) {
-                            statusBar.Text = "CANCELLED";
-                            return;
-                        }
-                        outputRecurPhraseResults(results, searchTerm);
-                    }
-
-                    string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
-                    statusBar.Text = timeOutput;
-                    util.consoleLog(timeOutput);
-
-                    //Output found files to the form
-                    //outputRangeResults(results);
-                    
                 } else {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
                 }
@@ -292,6 +234,20 @@ namespace File_Finder {
                 util.consoleLog(err.Message);
                 errorPopup(err.Message + " Aborting search.", "Search Error");
             }
+
+            performanceTimer.Stop();
+
+            if (cancel) {
+                statusBar.Text = "CANCELLED";
+                return;
+            }
+
+            //Output found files to the form
+            outputResults(results, searchType, searchTerm);
+
+            string timeOutput = convertTime(performanceTimer.ElapsedMilliseconds);
+            statusBar.Text = timeOutput;
+            util.consoleLog(timeOutput);
 
             //Enable proper buttons
             cancelBtn.Enabled = false;
