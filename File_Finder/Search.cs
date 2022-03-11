@@ -35,7 +35,7 @@ namespace File_Finder {
                 try {
                     fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
                 }
-                catch(Exception err){
+                catch (Exception err) {
                     util.consoleLog(err.Message);
                 }
 
@@ -54,7 +54,7 @@ namespace File_Finder {
                 if (ui.getCancel()) { return fileList; }
                 try {
                     fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
-                }catch(UnauthorizedAccessException err){
+                }catch(Exception err){
                     util.consoleLog(err.Message);
                     continue;
                 }
@@ -68,7 +68,7 @@ namespace File_Finder {
                     ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
                     getAllFiles(d, fileList, searchTerm);
                 });
-            }catch(UnauthorizedAccessException err){
+            }catch(Exception err){
                 util.consoleLog(err.Message);
             }
 
@@ -81,12 +81,7 @@ namespace File_Finder {
             List<string> fileList = new List<string>();
 
             //For each found directory do a recursive phrase search
-            try {
-                fileList = getAllFiles(path, fileList, searchTerm);
-            }
-            catch (Exception err) {
-                util.consoleLog(err.Message);
-            }
+            fileList = getAllFiles(path, fileList, searchTerm);
 
             fileList.RemoveAll(item => item == null);
 
@@ -119,7 +114,14 @@ namespace File_Finder {
 
             foreach (var type in fileTypes) {
                 if (ui.getCancel()) { return fileList; }
-                fileList.AddRange(Directory.GetFiles(path, $"*{type}").Where(filename => rangeVals.Any(filename.Split("\\").Last().Contains)));
+
+                try {
+                    fileList.AddRange(Directory.GetFiles(path, $"*{type}").Where(filename => rangeVals.Any(filename.Split("\\").Last().Contains)));
+                }
+                catch (Exception err) {
+                    util.consoleLog(err.Message);
+                    continue;
+                }
             }
 
             fileList.RemoveAll(item => item == null);
@@ -145,17 +147,28 @@ namespace File_Finder {
         private List<string> getAllFilesRange(string path, List<string> fileList, List<string> rangeVals) {
             foreach (var type in fileTypes) {
                 if (ui.getCancel()) { return fileList; }
+                try { 
                 fileList.AddRange(Directory.GetFiles(path, $"*{type}").Where(filename => rangeVals.Any(filename.Split("\\").Last().Contains)));
+                }
+                catch (Exception err) {
+                    util.consoleLog(err.Message);
+                    continue;
+                }
             }
 
-            Parallel.ForEach(Directory.GetDirectories(path), (d, state) => {
-                if (ui.getCancel()) {
-                    state.Stop();
-                    return;
-                }
-                ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
-                getAllFilesRange(d, fileList, rangeVals);
-            });
+            try {
+                Parallel.ForEach(Directory.GetDirectories(path), (d, state) => {
+                    if (ui.getCancel()) {
+                        state.Stop();
+                        return;
+                    }
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
+                    getAllFilesRange(d, fileList, rangeVals);
+                });
+            }
+            catch (Exception err) {
+                util.consoleLog(err.Message);
+            }
             return fileList;
         }
 
