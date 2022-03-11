@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test7();
+            test.test6();
         }
 
         //Set Dark Mode
@@ -43,13 +43,17 @@ namespace File_Finder {
 
         //Allows unit tests to fill out the form
         public void setUIValues(string path, string fileTypes, int searchTypeIdx, string searchTerm, bool recursive) {
+            //Pass info into text fields
             pathTextBox.Text = path;
             fileTypesTextBox.Text = fileTypes;
             searchTermType.SelectedIndex = searchTypeIdx;
 
+            
             if(searchTypeIdx == 0) {
+                //If a phrase search is selected then fill out the phrase search text fields
                 phraseTextBox.Text = searchTerm;
             } else if(searchTypeIdx == 1){
+                //If a range search is selected then fill out the range search text fields
                 string[] searchTermParts = searchTerm.Split('-');
                 lowerBound.Text = searchTermParts[0];
                 upperBound.Text = searchTermParts[1];
@@ -76,35 +80,36 @@ namespace File_Finder {
             }
         }
 
-        //Output results to the GUI for phrase search
+        //Output results to the GUI search
         private void outputResults(List<string> files, string searchType, string searchTerm) {
-            if(searchType == "Keyword Phrase") {
+            if(searchType == "Keyword Phrase") {  //Output phrase search results
                 foreach (var filepath in files) {
-                    if (filepath == searchTerm) {
+                    //If search term was found in the returned file list then no match was found
+                    if (filepath == searchTerm) {  
                         notDetected.Items.Add(filepath);
-                    } else {
+                    } else {  //If the term was found then record its full path and filename
                         string filename = filepath.Split("\\").Last();
                         foundFiles.Items.Add(filename);
                         foundFilesPath.Items.Add(filepath);
                     }
                 }
-            } else if(searchType == "Number Range"){
-                
-
+            } else if(searchType == "Number Range"){  //Output range search results
                 int lower = Int32.Parse(searchTerm.Split("-")[0]);
                 int upper = Int32.Parse(searchTerm.Split("-")[1]);
 
+                //Make a list containing all of the numbers that were searched for
                 List<string> rangeVals = new List<string>();
-
                 for (int i = lower; i <= upper; i++) {
                     rangeVals.Add(i.ToString());
                 }
 
                 foreach (var filepath in files) {
                     string filename = filepath.Split("\\").Last();
+                    //If the filename is equal to any of the values in the
+                    //returned file list then no match was found
                     if (rangeVals.Any(filename.Equals)) {
                         notDetected.Items.Add(filename);
-                    } else {
+                    } else {  //If the term was found then record its full path and filename
                         foundFiles.Items.Add(filename);
                         foundFilesPath.Items.Add(filepath);
                     }
@@ -255,6 +260,31 @@ namespace File_Finder {
             searchBtn.Enabled = true;
         }
 
+        private void foundFilesPath_DoubleClick(object sender, EventArgs e) {
+            if (foundFilesPath.SelectedItem != null) {
+                //Open the file that was double clicked on with its default application
+                string path = foundFilesPath.GetItemText(foundFilesPath.SelectedItem);
+                new Process {
+                    StartInfo = new ProcessStartInfo($@"{path}") {
+                        UseShellExecute = true,
+                        FileName = path
+                    }
+                }.Start();
 
+                //Open the directory of the file that was clicked on using the File Explorer
+                OpenFileDialog dialog = new OpenFileDialog();
+                if (DialogResult.OK == dialog.ShowDialog()) {
+                    string selectedItemPath = dialog.FileName;
+
+                    //Open the file selected using the File Explorer with its default application
+                    new Process {
+                        StartInfo = new ProcessStartInfo($@"{selectedItemPath}") {
+                            UseShellExecute = true,
+                            FileName = selectedItemPath
+                        }
+                    }.Start();
+                }
+            }
+        }
     }
 }

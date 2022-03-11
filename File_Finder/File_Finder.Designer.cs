@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.recurCheckBox = new System.Windows.Forms.CheckBox();
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,6 +42,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.foundFiles = new System.Windows.Forms.ListBox();
+            this.fileItemCM = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.open_file = new System.Windows.Forms.ToolStripMenuItem();
             this.notDetected = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -50,6 +53,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.cancelBtn = new System.Windows.Forms.Button();
+            this.fileItemCM.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -182,6 +186,7 @@
             // 
             this.foundFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.foundFiles.ContextMenuStrip = this.fileItemCM;
             this.foundFiles.FormattingEnabled = true;
             this.foundFiles.HorizontalScrollbar = true;
             this.foundFiles.ItemHeight = 15;
@@ -190,6 +195,19 @@
             this.foundFiles.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.foundFiles.Size = new System.Drawing.Size(325, 94);
             this.foundFiles.TabIndex = 12;
+            // 
+            // fileItemCM
+            // 
+            this.fileItemCM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.open_file});
+            this.fileItemCM.Name = "fileItemCM";
+            this.fileItemCM.Size = new System.Drawing.Size(181, 48);
+            // 
+            // open_file
+            // 
+            this.open_file.Name = "open_file";
+            this.open_file.Size = new System.Drawing.Size(180, 22);
+            this.open_file.Text = "Open File";
             // 
             // notDetected
             // 
@@ -246,6 +264,7 @@
             this.foundFilesPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.foundFilesPath.Size = new System.Drawing.Size(325, 94);
             this.foundFilesPath.TabIndex = 16;
+            this.foundFilesPath.DoubleClick += new System.EventHandler(this.foundFilesPath_DoubleClick);
             // 
             // label8
             // 
@@ -318,6 +337,7 @@
             this.Name = "File_Finder";
             this.Text = "USS-UPI File Finder";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.fileItemCM.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -351,5 +371,7 @@
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel statusBar;
         private Button cancelBtn;
+        private ContextMenuStrip fileItemCM;
+        private ToolStripMenuItem open_file;
     }
 }
