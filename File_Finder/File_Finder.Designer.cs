@@ -53,6 +53,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.cancelBtn = new System.Windows.Forms.Button();
+            this.open_explorer = new System.Windows.Forms.ToolStripMenuItem();
             this.fileItemCM.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -199,16 +200,17 @@
             // fileItemCM
             // 
             this.fileItemCM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.open_file});
+            this.open_file,
+            this.open_explorer});
             this.fileItemCM.Name = "fileItemCM";
-            this.fileItemCM.Size = new System.Drawing.Size(125, 26);
+            this.fileItemCM.Size = new System.Drawing.Size(181, 70);
             this.fileItemCM.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.fileItemCM_ItemClicked);
             // 
             // open_file
             // 
             this.open_file.Name = "open_file";
-            this.open_file.Size = new System.Drawing.Size(124, 22);
-            this.open_file.Text = "Open File";
+            this.open_file.Size = new System.Drawing.Size(180, 22);
+            this.open_file.Text = "Open file";
             // 
             // notDetected
             // 
@@ -267,7 +269,6 @@
             this.foundFilesPath.Size = new System.Drawing.Size(325, 94);
             this.foundFilesPath.TabIndex = 16;
             this.foundFilesPath.DoubleClick += new System.EventHandler(this.foundFilesPath_DoubleClick);
-            this.foundFilesPath.MouseDown += new System.Windows.Forms.MouseEventHandler(this.foundFilesPath_MouseClick);
             // 
             // label8
             // 
@@ -307,6 +308,12 @@
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            // 
+            // open_explorer
+            // 
+            this.open_explorer.Name = "open_explorer";
+            this.open_explorer.Size = new System.Drawing.Size(180, 22);
+            this.open_explorer.Text = "Open file location";
             // 
             // File_Finder
             // 
@@ -376,5 +383,6 @@
         private Button cancelBtn;
         private ContextMenuStrip fileItemCM;
         private ToolStripMenuItem open_file;
+        private ToolStripMenuItem open_explorer;
     }
 }

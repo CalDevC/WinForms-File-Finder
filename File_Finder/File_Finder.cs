@@ -275,8 +275,12 @@ namespace File_Finder {
                 path = foundFilesPath.GetItemText(foundFilesPath.Items[stripParent.SelectedIndex]);
             }
 
-            if(e.ClickedItem.Name == "open_file") {
+            strip.Hide();
+
+            if (e.ClickedItem.Name == "open_file") {
                 openFile(path);
+            } else if(e.ClickedItem.Name == "open_explorer") {
+                openFileExp();
             }
         }
 
@@ -297,14 +301,19 @@ namespace File_Finder {
             
         }
 
-        private void foundFilesPath_MouseClick(object sender, MouseEventArgs e) {
-            ListBox listBox = (ListBox)sender;
-            
+        private void openFileExp() {
+            //Open the directory of the file that was clicked on using the File Explorer
+            OpenFileDialog dialog = new OpenFileDialog();
+            if (DialogResult.OK == dialog.ShowDialog()) {
+                string selectedItemPath = dialog.FileName;
 
-            //If it was a right click
-            if (e.Button == MouseButtons.Right) {
-                //util.consoleLog(listBox.Name);
-                listBox.ContextMenuStrip.Show();
+                //Open the file selected using the File Explorer with its default application
+                new Process {
+                    StartInfo = new ProcessStartInfo($@"{selectedItemPath}") {
+                        UseShellExecute = true,
+                        FileName = selectedItemPath
+                    }
+                }.Start();
             }
         }
         
@@ -312,27 +321,7 @@ namespace File_Finder {
         private void foundFilesPath_DoubleClick(object sender, EventArgs e) {
             if (foundFilesPath.SelectedItem != null) {
                 //Open the file that was double clicked on with its default application
-                string path = foundFilesPath.GetItemText(foundFilesPath.SelectedItem);
-                new Process {
-                    StartInfo = new ProcessStartInfo($@"{path}") {
-                        UseShellExecute = true,
-                        FileName = path
-                    }
-                }.Start();
-
-                //Open the directory of the file that was clicked on using the File Explorer
-                OpenFileDialog dialog = new OpenFileDialog();
-                if (DialogResult.OK == dialog.ShowDialog()) {
-                    string selectedItemPath = dialog.FileName;
-
-                    //Open the file selected using the File Explorer with its default application
-                    new Process {
-                        StartInfo = new ProcessStartInfo($@"{selectedItemPath}") {
-                            UseShellExecute = true,
-                            FileName = selectedItemPath
-                        }
-                    }.Start();
-                }
+                openFile(foundFilesPath.GetItemText(foundFilesPath.SelectedItem));
             }
         }
     }
