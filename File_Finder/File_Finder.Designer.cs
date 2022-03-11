@@ -201,12 +201,13 @@
             this.fileItemCM.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.open_file});
             this.fileItemCM.Name = "fileItemCM";
-            this.fileItemCM.Size = new System.Drawing.Size(181, 48);
+            this.fileItemCM.Size = new System.Drawing.Size(125, 26);
+            this.fileItemCM.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.fileItemCM_ItemClicked);
             // 
             // open_file
             // 
             this.open_file.Name = "open_file";
-            this.open_file.Size = new System.Drawing.Size(180, 22);
+            this.open_file.Size = new System.Drawing.Size(124, 22);
             this.open_file.Text = "Open File";
             // 
             // notDetected
@@ -256,6 +257,7 @@
             // 
             this.foundFilesPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.foundFilesPath.ContextMenuStrip = this.fileItemCM;
             this.foundFilesPath.FormattingEnabled = true;
             this.foundFilesPath.HorizontalScrollbar = true;
             this.foundFilesPath.ItemHeight = 15;
@@ -265,6 +267,7 @@
             this.foundFilesPath.Size = new System.Drawing.Size(325, 94);
             this.foundFilesPath.TabIndex = 16;
             this.foundFilesPath.DoubleClick += new System.EventHandler(this.foundFilesPath_DoubleClick);
+            this.foundFilesPath.MouseDown += new System.Windows.Forms.MouseEventHandler(this.foundFilesPath_MouseClick);
             // 
             // label8
             // 

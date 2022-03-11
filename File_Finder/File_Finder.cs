@@ -85,7 +85,7 @@ namespace File_Finder {
             if(searchType == "Keyword Phrase") {  //Output phrase search results
                 foreach (var filepath in files) {
                     //If search term was found in the returned file list then no match was found
-                    if (filepath == searchTerm) {  
+                    if (filepath == searchTerm) {
                         notDetected.Items.Add(filepath);
                     } else {  //If the term was found then record its full path and filename
                         string filename = filepath.Split("\\").Last();
@@ -260,6 +260,55 @@ namespace File_Finder {
             searchBtn.Enabled = true;
         }
 
+        private void fileItemCM_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+            //Get the object that called the context menu
+            ContextMenuStrip strip = (ContextMenuStrip) sender;
+            ListBox stripParent = (ListBox) strip.SourceControl;
+            string path = "";
+
+            //Get the selected item
+            if(stripParent.SelectedIndex < 0) {
+                util.consoleLog("ERROR: Selected item's index was less than 0");
+                errorPopup("Select an item to open", "Open file error");
+                return;
+            } else {
+                path = foundFilesPath.GetItemText(foundFilesPath.Items[stripParent.SelectedIndex]);
+            }
+
+            if(e.ClickedItem.Name == "open_file") {
+                openFile(path);
+            }
+        }
+
+        private void openFile(string path) {
+            //Open the file located at path
+            if (File.Exists(path)) {
+                new Process {
+                    StartInfo = new ProcessStartInfo($@"{path}") {
+                        UseShellExecute = true,
+                        FileName = path
+                    }
+                }.Start();
+            } else {
+                util.consoleLog("ERROR: Selected item was not a valid file path");
+                errorPopup("Select an item to open", "Open file error");
+                return;
+            }
+            
+        }
+
+        private void foundFilesPath_MouseClick(object sender, MouseEventArgs e) {
+            ListBox listBox = (ListBox)sender;
+            
+
+            //If it was a right click
+            if (e.Button == MouseButtons.Right) {
+                //util.consoleLog(listBox.Name);
+                listBox.ContextMenuStrip.Show();
+            }
+        }
+        
+        //On a found files (full path) item double clicked
         private void foundFilesPath_DoubleClick(object sender, EventArgs e) {
             if (foundFilesPath.SelectedItem != null) {
                 //Open the file that was double clicked on with its default application
