@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test6();
+            //test.test6();
         }
 
         //Set Dark Mode
