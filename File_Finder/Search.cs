@@ -32,7 +32,13 @@ namespace File_Finder {
 
             //For each found directory do a recursive phrase search
             foreach (var type in fileTypes) {
-                fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
+                try {
+                    fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
+                }
+                catch(Exception err){
+                    util.consoleLog(err.Message);
+                }
+
                 if (fileList.Count == 0) {
                     util.consoleLog("NOT FOUND\n");
                     fileList.Add(searchTerm);
@@ -46,23 +52,28 @@ namespace File_Finder {
         private List<string> getAllFiles(string path, List<string> fileList, string searchTerm) {
             foreach(var type in fileTypes) {
                 if (ui.getCancel()) { return fileList; }
-                fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
+                try {
+                    fileList.AddRange(Directory.GetFiles(path, $"*{searchTerm}*{type}"));
+                }catch(UnauthorizedAccessException err){
+                    util.consoleLog(err.Message);
+                    continue;
+                }
+            }
+            try {
+                Parallel.ForEach(Directory.GetDirectories(path), (d, state) => {
+                    if (ui.getCancel()) {
+                        state.Stop();
+                        return; 
+                    }
+                    ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
+                    getAllFiles(d, fileList, searchTerm);
+                });
+            }catch(UnauthorizedAccessException err){
+                util.consoleLog(err.Message);
             }
 
-            Parallel.ForEach(Directory.GetDirectories(path), (d, state) => {
-                if (ui.getCancel()) {
-                    state.Stop();
-                    return; 
-                }
-                ui.Invoke((MethodInvoker)delegate { ui.updateStatus(searchMsg + d); });
-                getAllFiles(d, fileList, searchTerm);
-            });
-
-            //Update UI
-            ui.Invoke((MethodInvoker)delegate { ui.updateStatus("Outputting found files..."); });
-
-            return fileList;
-        }
+                return fileList;
+            }
 
         //***** Recursive phrase search *****//
         public List<string> phraseSearchRecur(string searchTerm) {
@@ -70,7 +81,13 @@ namespace File_Finder {
             List<string> fileList = new List<string>();
 
             //For each found directory do a recursive phrase search
-            fileList = getAllFiles(path, fileList, searchTerm);
+            try {
+                fileList = getAllFiles(path, fileList, searchTerm);
+            }
+            catch (Exception err) {
+                util.consoleLog(err.Message);
+            }
+
             fileList.RemoveAll(item => item == null);
 
             if (fileList.Count == 0) {

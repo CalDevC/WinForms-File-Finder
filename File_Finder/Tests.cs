@@ -53,5 +53,9 @@ namespace File_Finder {
         public void test8() {
             ui.setUIValues("\\\\upifile1\\vidar", ".pdf", 1, "2000-3000", true);
         }
+
+        public void test9() {
+            ui.setUIValues("\\\\upifile6\\engrdat$", ".dwg", 0, "pltcm", true);
+        }
     }
 }
