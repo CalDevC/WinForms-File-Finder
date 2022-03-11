@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test9();
+            test.test6();
         }
 
         //Set Dark Mode
@@ -280,7 +280,7 @@ namespace File_Finder {
             if (e.ClickedItem.Name == "open_file") {
                 openFile(path);
             } else if(e.ClickedItem.Name == "open_explorer") {
-                openFileExp();
+                openFileExp(path);
             }
         }
 
@@ -302,17 +302,19 @@ namespace File_Finder {
             
         }
 
-        private void openFileExp() {
+        private void openFileExp(string path) {
             //Open the directory of the file that was clicked on using the File Explorer
             OpenFileDialog dialog = new OpenFileDialog();
-            if (DialogResult.OK == dialog.ShowDialog()) {
+            dialog.InitialDirectory = path.TrimEnd('\\').Remove(path.LastIndexOf('\\') + 1);
+            if (dialog.ShowDialog() == DialogResult.OK) {
                 string selectedItemPath = dialog.FileName;
-
                 //Open the file selected using the File Explorer with its default application
                 new Process {
                     StartInfo = new ProcessStartInfo($@"{selectedItemPath}") {
                         UseShellExecute = true,
-                        FileName = selectedItemPath
+                        WorkingDirectory = selectedItemPath = selectedItemPath.TrimEnd('\\').Remove(selectedItemPath.LastIndexOf('\\') + 1),
+                        FileName = selectedItemPath,
+                        Verb = "OPEN"
                     }
                 }.Start();
             }
