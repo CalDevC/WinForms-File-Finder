@@ -23,7 +23,7 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            test.test6();
+            //test.test6();
         }
 
         //Set Dark Mode
@@ -284,6 +284,7 @@ namespace File_Finder {
             }
         }
 
+        //Opens a file located at path
         private void openFile(string path) {
             //Open the file located at path
             if (File.Exists(path)) {
@@ -316,12 +317,20 @@ namespace File_Finder {
                 }.Start();
             }
         }
-        
-        //On a found files (full path) item double clicked
+
+        //On a found files item double clicked
         private void foundFilesPath_DoubleClick(object sender, EventArgs e) {
             if (foundFilesPath.SelectedItem != null) {
                 //Open the file that was double clicked on with its default application
                 openFile(foundFilesPath.GetItemText(foundFilesPath.SelectedItem));
+            }
+        }
+
+        //On a found files (full path) item double clicked
+        private void foundFiles_DoubleClick(object sender, EventArgs e) {
+            if (foundFiles.SelectedItem != null) {
+                //Open the file that was double clicked on with its default application
+                openFile(foundFilesPath.GetItemText(foundFilesPath.Items[foundFiles.SelectedIndex]));
             }
         }
     }

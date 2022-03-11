@@ -196,6 +196,7 @@
             this.foundFiles.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.foundFiles.Size = new System.Drawing.Size(325, 94);
             this.foundFiles.TabIndex = 12;
+            this.foundFiles.DoubleClick += new System.EventHandler(this.foundFiles_DoubleClick);
             // 
             // fileItemCM
             // 
