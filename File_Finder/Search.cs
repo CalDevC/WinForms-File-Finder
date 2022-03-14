@@ -72,8 +72,8 @@ namespace File_Finder {
                 util.consoleLog(err.Message);
             }
 
-                return fileList;
-            }
+            return fileList;
+        }
 
         //***** Recursive phrase search *****//
         public List<string> phraseSearchRecur(string searchTerm) {

@@ -338,9 +338,9 @@ namespace File_Finder {
             }
         }
 
-        //
+        //On key pressed inside a text box
         private void textbox_KeyPress(object sender, KeyPressEventArgs e) {
-            if(e.KeyChar == (char)Keys.Enter ) {
+            if(e.KeyChar == (char)Keys.Enter && searchBtn.Enabled == true) {
                 searchBtn_Click(sender, e);
             }
         }
