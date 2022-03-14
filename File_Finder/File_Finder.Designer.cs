@@ -44,6 +44,7 @@
             this.foundFiles = new System.Windows.Forms.ListBox();
             this.fileItemCM = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.open_file = new System.Windows.Forms.ToolStripMenuItem();
+            this.open_explorer = new System.Windows.Forms.ToolStripMenuItem();
             this.notDetected = new System.Windows.Forms.ListBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -53,7 +54,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.cancelBtn = new System.Windows.Forms.Button();
-            this.open_explorer = new System.Windows.Forms.ToolStripMenuItem();
+            this.label9 = new System.Windows.Forms.Label();
             this.fileItemCM.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -66,7 +67,7 @@
             this.recurCheckBox.Location = new System.Drawing.Point(100, 141);
             this.recurCheckBox.Name = "recurCheckBox";
             this.recurCheckBox.Size = new System.Drawing.Size(120, 20);
-            this.recurCheckBox.TabIndex = 0;
+            this.recurCheckBox.TabIndex = 4;
             this.recurCheckBox.Text = "Recursive Search";
             this.recurCheckBox.UseVisualStyleBackColor = true;
             // 
@@ -109,7 +110,7 @@
             this.fileTypesTextBox.Location = new System.Drawing.Point(100, 62);
             this.fileTypesTextBox.Name = "fileTypesTextBox";
             this.fileTypesTextBox.Size = new System.Drawing.Size(325, 23);
-            this.fileTypesTextBox.TabIndex = 3;
+            this.fileTypesTextBox.TabIndex = 2;
             // 
             // searchTermType
             // 
@@ -124,7 +125,7 @@
             this.searchTermType.Location = new System.Drawing.Point(100, 102);
             this.searchTermType.Name = "searchTermType";
             this.searchTermType.Size = new System.Drawing.Size(325, 23);
-            this.searchTermType.TabIndex = 5;
+            this.searchTermType.TabIndex = 3;
             this.searchTermType.SelectedIndexChanged += new System.EventHandler(this.searchTermType_Change);
             // 
             // searchBtn
@@ -133,7 +134,7 @@
             this.searchBtn.Location = new System.Drawing.Point(166, 244);
             this.searchBtn.Name = "searchBtn";
             this.searchBtn.Size = new System.Drawing.Size(75, 23);
-            this.searchBtn.TabIndex = 6;
+            this.searchBtn.TabIndex = 7;
             this.searchBtn.Text = "Search";
             this.searchBtn.UseVisualStyleBackColor = true;
             this.searchBtn.Click += new System.EventHandler(this.searchBtn_Click);
@@ -146,21 +147,21 @@
             this.phraseTextBox.Location = new System.Drawing.Point(100, 167);
             this.phraseTextBox.Name = "phraseTextBox";
             this.phraseTextBox.Size = new System.Drawing.Size(325, 23);
-            this.phraseTextBox.TabIndex = 7;
+            this.phraseTextBox.TabIndex = 5;
             // 
             // lowerBound
             // 
             this.lowerBound.Location = new System.Drawing.Point(100, 167);
             this.lowerBound.Name = "lowerBound";
             this.lowerBound.Size = new System.Drawing.Size(100, 23);
-            this.lowerBound.TabIndex = 8;
+            this.lowerBound.TabIndex = 5;
             // 
             // upperBound
             // 
             this.upperBound.Location = new System.Drawing.Point(236, 167);
             this.upperBound.Name = "upperBound";
             this.upperBound.Size = new System.Drawing.Size(100, 23);
-            this.upperBound.TabIndex = 9;
+            this.upperBound.TabIndex = 6;
             // 
             // label3
             // 
@@ -196,6 +197,7 @@
             this.foundFiles.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.foundFiles.Size = new System.Drawing.Size(325, 94);
             this.foundFiles.TabIndex = 12;
+            this.foundFiles.TabStop = false;
             this.foundFiles.DoubleClick += new System.EventHandler(this.foundFiles_DoubleClick);
             // 
             // fileItemCM
@@ -204,14 +206,20 @@
             this.open_file,
             this.open_explorer});
             this.fileItemCM.Name = "fileItemCM";
-            this.fileItemCM.Size = new System.Drawing.Size(181, 70);
+            this.fileItemCM.Size = new System.Drawing.Size(169, 48);
             this.fileItemCM.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.fileItemCM_ItemClicked);
             // 
             // open_file
             // 
             this.open_file.Name = "open_file";
-            this.open_file.Size = new System.Drawing.Size(180, 22);
+            this.open_file.Size = new System.Drawing.Size(168, 22);
             this.open_file.Text = "Open file";
+            // 
+            // open_explorer
+            // 
+            this.open_explorer.Name = "open_explorer";
+            this.open_explorer.Size = new System.Drawing.Size(168, 22);
+            this.open_explorer.Text = "Open file location";
             // 
             // notDetected
             // 
@@ -225,6 +233,7 @@
             this.notDetected.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.notDetected.Size = new System.Drawing.Size(325, 94);
             this.notDetected.TabIndex = 13;
+            this.notDetected.TabStop = false;
             // 
             // label5
             // 
@@ -269,6 +278,7 @@
             this.foundFilesPath.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.foundFilesPath.Size = new System.Drawing.Size(325, 94);
             this.foundFilesPath.TabIndex = 16;
+            this.foundFilesPath.TabStop = false;
             this.foundFilesPath.DoubleClick += new System.EventHandler(this.foundFilesPath_DoubleClick);
             // 
             // label8
@@ -305,16 +315,20 @@
             this.cancelBtn.Location = new System.Drawing.Point(247, 244);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(75, 23);
-            this.cancelBtn.TabIndex = 20;
+            this.cancelBtn.TabIndex = 8;
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
             this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
-            // open_explorer
+            // label9
             // 
-            this.open_explorer.Name = "open_explorer";
-            this.open_explorer.Size = new System.Drawing.Size(180, 22);
-            this.open_explorer.Text = "Open file location";
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label9.Location = new System.Drawing.Point(25, 105);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(69, 15);
+            this.label9.TabIndex = 21;
+            this.label9.Text = "Search Type";
             // 
             // File_Finder
             // 
@@ -322,6 +336,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(458, 661);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label8);
@@ -385,5 +400,6 @@
         private ContextMenuStrip fileItemCM;
         private ToolStripMenuItem open_file;
         private ToolStripMenuItem open_explorer;
+        private Label label9;
     }
 }
