@@ -175,8 +175,8 @@ namespace File_Finder {
             string searchTerm = "";
 
             //Check path validity
-            if (path == "" || !Directory.Exists(path)) {
-                errorPopup("Invalid search path, please enter a valid directory to search. Begin path with: \\\\", "Search Error");
+            if (path == "" || !Directory.Exists(path) || path.Contains("/")) {
+                errorPopup("Invalid search path, please enter a valid directory to search. Paths cannot contain / and must begin with: \\\\", "Search Error");
                 return;
             }
 
