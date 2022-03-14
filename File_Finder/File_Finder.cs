@@ -23,7 +23,9 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             //darkModeOn();
-            //test.test6();
+            #if DEBUG
+                test.test6();
+            #endif
         }
 
         //Set Dark Mode
