@@ -337,5 +337,12 @@ namespace File_Finder {
                 openFile(foundFilesPath.GetItemText(foundFilesPath.Items[foundFiles.SelectedIndex]));
             }
         }
+
+        //
+        private void textbox_KeyPress(object sender, KeyPressEventArgs e) {
+            if(e.KeyChar == (char)Keys.Enter ) {
+                searchBtn_Click(sender, e);
+            }
+        }
     }
 }

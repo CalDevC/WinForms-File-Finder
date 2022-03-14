@@ -81,6 +81,7 @@
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(325, 23);
             this.pathTextBox.TabIndex = 1;
+            this.pathTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textbox_KeyPress);
             // 
             // label1
             // 
@@ -111,6 +112,7 @@
             this.fileTypesTextBox.Name = "fileTypesTextBox";
             this.fileTypesTextBox.Size = new System.Drawing.Size(325, 23);
             this.fileTypesTextBox.TabIndex = 2;
+            this.fileTypesTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textbox_KeyPress);
             // 
             // searchTermType
             // 
@@ -148,6 +150,7 @@
             this.phraseTextBox.Name = "phraseTextBox";
             this.phraseTextBox.Size = new System.Drawing.Size(325, 23);
             this.phraseTextBox.TabIndex = 5;
+            this.phraseTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textbox_KeyPress);
             // 
             // lowerBound
             // 
@@ -155,6 +158,7 @@
             this.lowerBound.Name = "lowerBound";
             this.lowerBound.Size = new System.Drawing.Size(100, 23);
             this.lowerBound.TabIndex = 5;
+            this.lowerBound.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textbox_KeyPress);
             // 
             // upperBound
             // 
@@ -162,6 +166,7 @@
             this.upperBound.Name = "upperBound";
             this.upperBound.Size = new System.Drawing.Size(100, 23);
             this.upperBound.TabIndex = 6;
+            this.upperBound.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textbox_KeyPress);
             // 
             // label3
             // 
