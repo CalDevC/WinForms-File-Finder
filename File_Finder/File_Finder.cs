@@ -3,6 +3,9 @@ using System.Diagnostics;
 namespace File_Finder {
     public partial class File_Finder : Form {
 
+
+        //==================================== FORM START UP ====================================//
+
         Utils util = new Utils();
         bool cancel = false;
         Stopwatch performanceTimer = new Stopwatch();
@@ -14,8 +17,10 @@ namespace File_Finder {
 
         //On form load
         private void Form1_Load(object sender, EventArgs e) {
+            //Instantiate test class
             Tests test = new Tests(this);
 
+            //Set the UI to its initial state
             phraseTextBox.Hide();
             lowerBound.Hide();
             upperBound.Hide();
@@ -23,151 +28,14 @@ namespace File_Finder {
             label4.Hide();
             cancelBtn.Enabled = false;
             genFilesBtn.Enabled = false;
-            //darkModeOn();
+            //Fill form with specified test data only when running in debugger
             #if DEBUG
                 test.test6();
             #endif
         }
 
-        //Set Dark Mode
-        private void darkModeOn() {
-            Color dark = SystemColors.ControlDark;
-            Color darker = SystemColors.ControlDarkDark;
-            Color light = SystemColors.Control;
 
-            ForeColor = light;
-            BackColor = darker;
-            foundFiles.BackColor = dark;
-            foundFilesPath.BackColor = dark;
-            notDetected.BackColor = dark;
-            searchBtn.BackColor = dark;
-            
-        }
-
-        //Allows unit tests to fill out the form
-        public void setUIValues(string path, string fileTypes, int searchTypeIdx, string searchTerm, bool recursive) {
-            //Pass info into text fields
-            pathTextBox.Text = path;
-            fileTypesTextBox.Text = fileTypes;
-            searchTermType.SelectedIndex = searchTypeIdx;
-
-            
-            if(searchTypeIdx == 0) {
-                //If a phrase search is selected then fill out the phrase search text fields
-                phraseTextBox.Text = searchTerm;
-            } else if(searchTypeIdx == 1){
-                //If a range search is selected then fill out the range search text fields
-                string[] searchTermParts = searchTerm.Split('-');
-                lowerBound.Text = searchTermParts[0];
-                upperBound.Text = searchTermParts[1];
-            }
-            
-            recurCheckBox.Checked = recursive;
-        }
-
-        //On dropdown value change
-        private void searchTermType_Change(object sender, EventArgs e) {
-            label4.Show();
-            if (searchTermType.Text == "Keyword Phrase") {
-                //Show phrase textbox and hide number range boxes
-                phraseTextBox.Show();
-                lowerBound.Hide();
-                upperBound.Hide();
-                label3.Hide();
-            } else if (searchTermType.Text == "Number Range") {
-                //Hide phrase textbox and show number range boxes
-                phraseTextBox.Hide();
-                lowerBound.Show();
-                upperBound.Show();
-                label3.Show();
-            }
-        }
-
-        //Output results to the GUI search
-        private void outputResults(List<string> files, string searchType, string searchTerm) {
-            if(searchType == "Keyword Phrase") {  //Output phrase search results
-                foreach (var filepath in files) {
-                    //If search term was found in the returned file list then no match was found
-                    if (filepath == searchTerm) {
-                        notDetected.Items.Add(filepath);
-                    } else {  //If the term was found then record its full path and filename
-                        string filename = filepath.Split("\\").Last();
-                        foundFiles.Items.Add(filename);
-                        foundFilesPath.Items.Add(filepath);
-                    }
-                }
-            } else if(searchType == "Number Range"){  //Output range search results
-                int lower = Int32.Parse(searchTerm.Split("-")[0]);
-                int upper = Int32.Parse(searchTerm.Split("-")[1]);
-
-                //Make a list containing all of the numbers that were searched for
-                List<string> rangeVals = new List<string>();
-                for (int i = lower; i <= upper; i++) {
-                    rangeVals.Add(i.ToString());
-                }
-
-                foreach (var filepath in files) {
-                    string filename = filepath.Split("\\").Last();
-                    //If the filename is equal to any of the values in the
-                    //returned file list then no match was found
-                    if (rangeVals.Any(filename.Equals)) {
-                        notDetected.Items.Add(filename);
-                    } else {  //If the term was found then record its full path and filename
-                        foundFiles.Items.Add(filename);
-                        foundFilesPath.Items.Add(filepath);
-                    }
-                }
-            }
-            
-        }
-
-        //Update the status bar
-        public void updateStatus(string text) {
-            statusBar.Text = text;
-        }
-
-        //Launch an error pop-up
-        private void errorPopup(string exceptionMsg, string popupTitle) {
-            MessageBox.Show(
-                exceptionMsg,
-                popupTitle,
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Error
-            );
-        }
-
-        //Launch an info pop-up
-        private DialogResult infoPopup(string msg, string popupTitle) {
-            return MessageBox.Show(
-                msg,
-                popupTitle,
-                MessageBoxButtons.OKCancel,
-                MessageBoxIcon.Exclamation
-            );
-        }
-        
-        //Get the value of the cancel flag
-        public bool getCancel() {
-            return cancel;
-        }
-
-        //On cancel button clicked
-        private void cancelBtn_Click(object sender, EventArgs e) {
-            cancel = true;
-            cancelBtn.Enabled = false;
-            searchBtn.Enabled = true;
-            genFilesBtn.Enabled = false;
-        }
-
-        //Convert performance timer output to human readable format
-        string convertTime(long timeMS) {
-            if (timeMS < 1000)
-                return $"Search completed in {timeMS} milliseconds";
-            else if (timeMS < 60000)
-                return $"Search completed in {timeMS / 1000} seconds";
-            else
-                return $"Search completed in {timeMS / 60000} minutes and {(timeMS % 60000) / 1000} seconds";
-        }
+        //=================================== EVENT HANDLERS ====================================//
 
         //On Search button clicked
         private async void searchBtn_Click(object sender, EventArgs e) {
@@ -240,7 +108,8 @@ namespace File_Finder {
                     throw new Exception("Invalid search type, please select a valid search type from the dropdown.");
                 }
 
-            } catch (Exception err) { //Catch if there is an invalid search type
+            }
+            catch (Exception err) { //Catch if there is an invalid search type
                 util.consoleLog(err.Message);
                 errorPopup(err.Message + " Aborting search.", "Search Error");
             }
@@ -266,14 +135,41 @@ namespace File_Finder {
             genFilesBtn.Enabled = true;
         }
 
+        //On dropdown value change
+        private void searchTermType_Change(object sender, EventArgs e) {
+            label4.Show();
+            if (searchTermType.Text == "Keyword Phrase") {
+                //Show phrase textbox and hide number range boxes
+                phraseTextBox.Show();
+                lowerBound.Hide();
+                upperBound.Hide();
+                label3.Hide();
+            } else if (searchTermType.Text == "Number Range") {
+                //Hide phrase textbox and show number range boxes
+                phraseTextBox.Hide();
+                lowerBound.Show();
+                upperBound.Show();
+                label3.Show();
+            }
+        }
+
+        //On cancel button clicked
+        private void cancelBtn_Click(object sender, EventArgs e) {
+            cancel = true;
+            cancelBtn.Enabled = false;
+            searchBtn.Enabled = true;
+            genFilesBtn.Enabled = false;
+        }
+
+        //On context menu item clicked
         private void fileItemCM_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
             //Get the object that called the context menu
-            ContextMenuStrip strip = (ContextMenuStrip) sender;
-            ListBox stripParent = (ListBox) strip.SourceControl;
+            ContextMenuStrip strip = (ContextMenuStrip)sender;
+            ListBox stripParent = (ListBox)strip.SourceControl;
             string path = "";
 
             //Get the selected item
-            if(stripParent.SelectedIndex < 0) {
+            if (stripParent.SelectedIndex < 0) {
                 util.consoleLog("ERROR: Selected item's index was less than 0");
                 errorPopup("Select an item to open", "Open file error");
                 return;
@@ -285,44 +181,8 @@ namespace File_Finder {
 
             if (e.ClickedItem.Name == "open_file") {
                 openFile(path);
-            } else if(e.ClickedItem.Name == "open_explorer") {
+            } else if (e.ClickedItem.Name == "open_explorer") {
                 openFileExp(path);
-            }
-        }
-
-        //Opens a file located at path
-        private void openFile(string path) {
-            //Open the file located at path
-            if (File.Exists(path)) {
-                new Process {
-                    StartInfo = new ProcessStartInfo($@"{path}") {
-                        UseShellExecute = true,
-                        FileName = path
-                    }
-                }.Start();
-            } else {
-                util.consoleLog("ERROR: Selected item was not a valid file path");
-                errorPopup("Select an item to open", "Open file error");
-                return;
-            }
-            
-        }
-
-        private void openFileExp(string path) {
-            //Open the directory of the file that was clicked on using the File Explorer
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.InitialDirectory = path.TrimEnd('\\').Remove(path.LastIndexOf('\\') + 1);
-            if (dialog.ShowDialog() == DialogResult.OK) {
-                string selectedItemPath = dialog.FileName;
-                //Open the file selected using the File Explorer with its default application
-                new Process {
-                    StartInfo = new ProcessStartInfo($@"{selectedItemPath}") {
-                        UseShellExecute = true,
-                        WorkingDirectory = selectedItemPath = selectedItemPath.TrimEnd('\\').Remove(selectedItemPath.LastIndexOf('\\') + 1),
-                        FileName = selectedItemPath,
-                        Verb = "OPEN"
-                    }
-                }.Start();
             }
         }
 
@@ -344,20 +204,188 @@ namespace File_Finder {
 
         //On key pressed inside a text box
         private void textbox_KeyPress(object sender, KeyPressEventArgs e) {
-            if(e.KeyChar == (char)Keys.Enter && searchBtn.Enabled == true) {
+            if (e.KeyChar == (char)Keys.Enter && searchBtn.Enabled == true) {
                 searchBtn_Click(sender, e);
             }
         }
 
-
+        //On 'Generate Files' button clicked
         private async void genFilesBtn_Click(object sender, EventArgs e) {
+            //Create a directory to store the output files
             DirectoryInfo outputDir = Directory.CreateDirectory(Application.StartupPath + @"\..\File_Finder_Output");
+
+            //Create files in output directory
             string detectedNamesFile = String.Format(@"{0}\detected_names.txt", outputDir.FullName);
             string detectedPathsFile = String.Format(@"{0}\detected_paths.txt", outputDir.FullName);
             string notDetectedFile = String.Format(@"{0}\not_detected.txt", outputDir.FullName);
+
+            //Write items to respective files
             await File.WriteAllLinesAsync(detectedNamesFile, foundFiles.Items.Cast<string>().ToList());
             await File.WriteAllLinesAsync(detectedPathsFile, foundFilesPath.Items.Cast<string>().ToList());
             await File.WriteAllLinesAsync(notDetectedFile, notDetected.Items.Cast<string>().ToList());
         }
+
+
+        //================================ INTERFACE FUNCTIONS ==================================//
+
+        //Update the status bar
+        public void updateStatus(string text) {
+            statusBar.Text = text;
+        }
+
+        //Get the value of the cancel flag
+        public bool getCancel() {
+            return cancel;
+        }
+
+        //Allows unit tests to fill out the form
+        public void setUIValues(string path, string fileTypes, int searchTypeIdx, string searchTerm, bool recursive) {
+            //Pass info into text fields
+            pathTextBox.Text = path;
+            fileTypesTextBox.Text = fileTypes;
+            searchTermType.SelectedIndex = searchTypeIdx;
+
+
+            if (searchTypeIdx == 0) {
+                //If a phrase search is selected then fill out the phrase search text fields
+                phraseTextBox.Text = searchTerm;
+            } else if (searchTypeIdx == 1) {
+                //If a range search is selected then fill out the range search text fields
+                string[] searchTermParts = searchTerm.Split('-');
+                lowerBound.Text = searchTermParts[0];
+                upperBound.Text = searchTermParts[1];
+            }
+
+            recurCheckBox.Checked = recursive;
+        }
+
+
+        //================================== HELPER FUNCTIONS ===================================//
+
+        //Output results to the GUI search
+        private void outputResults(List<string> files, string searchType, string searchTerm) {
+            if(searchType == "Keyword Phrase") {  //Output phrase search results
+                foreach (var filepath in files) {
+                    //If search term was found in the returned file list then no match was found
+                    if (filepath == searchTerm) {
+                        notDetected.Items.Add(filepath);
+                    } else {  //If the term was found then record its full path and filename
+                        string filename = filepath.Split("\\").Last();
+                        foundFiles.Items.Add(filename);
+                        foundFilesPath.Items.Add(filepath);
+                    }
+                }
+            } else if(searchType == "Number Range"){  //Output range search results
+                int lower = Int32.Parse(searchTerm.Split("-")[0]);
+                int upper = Int32.Parse(searchTerm.Split("-")[1]);
+
+                //Make a list containing all of the numbers that were searched for
+                List<string> rangeVals = new List<string>();
+                for (int i = lower; i <= upper; i++) {
+                    rangeVals.Add(i.ToString());
+                }
+
+                foreach (var filepath in files) {
+                    string filename = filepath.Split("\\").Last();
+                    //If the filename is equal to any of the values in the
+                    //returned file list then no match was found
+                    if (rangeVals.Any(filename.Equals)) {
+                        notDetected.Items.Add(filename);
+                    } else {  //If the term was found then record its full path and filename
+                        foundFiles.Items.Add(filename);
+                        foundFilesPath.Items.Add(filepath);
+                    }
+                }
+            }
+            
+        }
+
+        //Convert performance timer output to human readable format
+        string convertTime(long timeMS) {
+            if (timeMS < 1000)
+                return $"Search completed in {timeMS} milliseconds";
+            else if (timeMS < 60000)
+                return $"Search completed in {timeMS / 1000} seconds";
+            else
+                return $"Search completed in {timeMS / 60000} minutes and {(timeMS % 60000) / 1000} seconds";
+        }
+
+        //Opens a file located at 'path'
+        private void openFile(string path) {
+            //Open the file located at path
+            if (File.Exists(path)) {
+                new Process {
+                    StartInfo = new ProcessStartInfo($@"{path}") {
+                        UseShellExecute = true,
+                        FileName = path
+                    }
+                }.Start();
+            } else {
+                util.consoleLog("ERROR: Selected item was not a valid file path");
+                errorPopup("Select an item to open", "Open file error");
+                return;
+            }
+
+        }
+
+        //Opens a file explorer instance located at 'path'
+        private void openFileExp(string path) {
+            //Open the directory of the file that was clicked on using the File Explorer
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.InitialDirectory = path.TrimEnd('\\').Remove(path.LastIndexOf('\\') + 1);
+            if (dialog.ShowDialog() == DialogResult.OK) {
+                string selectedItemPath = dialog.FileName;
+                //Open the file selected using the File Explorer with its default application
+                new Process {
+                    StartInfo = new ProcessStartInfo($@"{selectedItemPath}") {
+                        UseShellExecute = true,
+                        WorkingDirectory = selectedItemPath = selectedItemPath.TrimEnd('\\').Remove(selectedItemPath.LastIndexOf('\\') + 1),
+                        FileName = selectedItemPath,
+                        Verb = "OPEN"
+                    }
+                }.Start();
+            }
+        }
+
+
+        //====================================== POP-UPS ========================================//
+
+        //Launch an error pop-up
+        private void errorPopup(string exceptionMsg, string popupTitle) {
+            MessageBox.Show(
+                exceptionMsg,
+                popupTitle,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
+        }
+
+        //Launch an info pop-up
+        private DialogResult infoPopup(string msg, string popupTitle) {
+            return MessageBox.Show(
+                msg,
+                popupTitle,
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Exclamation
+            );
+        }
+
+
+        //======================================= Unused ========================================//
+
+        //Set Dark Mode
+        //private void darkModeOn() {
+        //    Color dark = SystemColors.ControlDark;
+        //    Color darker = SystemColors.ControlDarkDark;
+        //    Color light = SystemColors.Control;
+
+        //    ForeColor = light;
+        //    BackColor = darker;
+        //    foundFiles.BackColor = dark;
+        //    foundFilesPath.BackColor = dark;
+        //    notDetected.BackColor = dark;
+        //    searchBtn.BackColor = dark;
+
+        //}
     }
 }
