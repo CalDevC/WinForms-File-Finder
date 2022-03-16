@@ -22,6 +22,7 @@ namespace File_Finder {
             label3.Hide();
             label4.Hide();
             cancelBtn.Enabled = false;
+            genFilesBtn.Enabled = false;
             //darkModeOn();
             #if DEBUG
                 test.test6();
@@ -155,6 +156,7 @@ namespace File_Finder {
             cancel = true;
             cancelBtn.Enabled = false;
             searchBtn.Enabled = true;
+            genFilesBtn.Enabled = false;
         }
 
         //Convert performance timer output to human readable format
@@ -200,6 +202,7 @@ namespace File_Finder {
             cancel = false;
             cancelBtn.Enabled = true;
             searchBtn.Enabled = false;
+            genFilesBtn.Enabled = false;
             foundFiles.Items.Clear();
             foundFilesPath.Items.Clear();
             notDetected.Items.Clear();
@@ -260,6 +263,7 @@ namespace File_Finder {
 
             //Enable proper buttons
             searchBtn.Enabled = true;
+            genFilesBtn.Enabled = true;
         }
 
         private void fileItemCM_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
