@@ -344,5 +344,16 @@ namespace File_Finder {
                 searchBtn_Click(sender, e);
             }
         }
+
+
+        private async void genFilesBtn_Click(object sender, EventArgs e) {
+            DirectoryInfo outputDir = Directory.CreateDirectory(Application.StartupPath + @"\..\File_Finder_Output");
+            string detectedNamesFile = String.Format(@"{0}\detected_names.txt", outputDir.FullName);
+            string detectedPathsFile = String.Format(@"{0}\detected_paths.txt", outputDir.FullName);
+            string notDetectedFile = String.Format(@"{0}\not_detected.txt", outputDir.FullName);
+            await File.WriteAllLinesAsync(detectedNamesFile, foundFiles.Items.Cast<string>().ToList());
+            await File.WriteAllLinesAsync(detectedPathsFile, foundFilesPath.Items.Cast<string>().ToList());
+            await File.WriteAllLinesAsync(notDetectedFile, notDetected.Items.Cast<string>().ToList());
+        }
     }
 }

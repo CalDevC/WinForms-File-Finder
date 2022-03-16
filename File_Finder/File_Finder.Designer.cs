@@ -55,6 +55,7 @@
             this.statusBar = new System.Windows.Forms.ToolStripStatusLabel();
             this.cancelBtn = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
+            this.genFilesBtn = new System.Windows.Forms.Button();
             this.fileItemCM.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -335,12 +336,24 @@
             this.label9.TabIndex = 21;
             this.label9.Text = "Search Type";
             // 
+            // genFilesBtn
+            // 
+            this.genFilesBtn.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.genFilesBtn.Location = new System.Drawing.Point(166, 273);
+            this.genFilesBtn.Name = "genFilesBtn";
+            this.genFilesBtn.Size = new System.Drawing.Size(156, 23);
+            this.genFilesBtn.TabIndex = 22;
+            this.genFilesBtn.Text = "Generate Files";
+            this.genFilesBtn.UseVisualStyleBackColor = true;
+            this.genFilesBtn.Click += new System.EventHandler(this.genFilesBtn_Click);
+            // 
             // File_Finder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(458, 661);
+            this.Controls.Add(this.genFilesBtn);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.cancelBtn);
             this.Controls.Add(this.statusStrip1);
@@ -406,5 +419,6 @@
         private ToolStripMenuItem open_file;
         private ToolStripMenuItem open_explorer;
         private Label label9;
+        private Button genFilesBtn;
     }
 }
