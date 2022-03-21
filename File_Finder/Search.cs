@@ -25,6 +25,7 @@ namespace File_Finder {
         //***** Non-recursive phrase search *****//
         public List<string> phraseSearch(string searchTerm) {
             List<string> fileList = new List<string>();
+            string originalSearchTerm = searchTerm;
             searchTerm = searchTerm.ToLower();
 
             //Update UI
@@ -41,7 +42,7 @@ namespace File_Finder {
 
                 if (fileList.Count == 0) {
                     util.consoleLog("NOT FOUND\n");
-                    fileList.Add(searchTerm);
+                    fileList.Add(originalSearchTerm);
                 }
             }
             
@@ -77,6 +78,7 @@ namespace File_Finder {
 
         //***** Recursive phrase search *****//
         public List<string> phraseSearchRecur(string searchTerm) {
+            string originalSearchTerm = searchTerm;
             searchTerm = searchTerm.ToLower();
             List<string> fileList = new List<string>();
 
@@ -87,7 +89,7 @@ namespace File_Finder {
 
             if (fileList.Count == 0) {
                 util.consoleLog("NOT FOUND\n");
-                fileList.Add(searchTerm);
+                fileList.Add(originalSearchTerm);
             }
 
             //Update UI
